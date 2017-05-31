@@ -1,0 +1,7 @@
+build/ipch/
+*.db
+source/Game.Desktop.OpenGL/obj/
+source/Library.Desktop/obj/
+source/UnitTest.Library.Desktop/bin/
+*.idb
+*.tlog
