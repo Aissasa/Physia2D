@@ -14,9 +14,17 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2Body.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2CircleShape.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2Fixture.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2Math.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2Shape.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2Body.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2CircleShape.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2Fixture.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

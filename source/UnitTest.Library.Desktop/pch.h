@@ -8,8 +8,6 @@
 #include <vector>
 #include <cstdint>
 
-//// C RunTime Header Files
-//#include <stdlib.h>
-//#include <malloc.h>
-//#include <memory.h>
-//#include <tchar.h>
+// glm
+#include "glm/glm.hpp"
+#include "glm/gtc/constants.hpp"
