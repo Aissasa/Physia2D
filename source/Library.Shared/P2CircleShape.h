@@ -4,13 +4,14 @@
 
 /** Class that represents the circle shape.
 */
-class P2CircleShape final : P2Shape
+class P2CircleShape : public P2Shape
 {
 public:
 
-	P2CircleShape();
+	P2CircleShape(glm::vec2 position = glm::vec2(0), glm::float32_t radius = 0);
 	~P2CircleShape() = default;
 
+	virtual P2Shape* Clone() override;
 	virtual P2AABB ComputeAABB(const P2Transform& transform) const override;
 	virtual P2MassData ComputeMass(const glm::float32_t density) const override;
 

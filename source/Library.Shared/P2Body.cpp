@@ -2,13 +2,38 @@
 #include "P2Body.h"
 #include "P2Fixture.h"
 #include "P2Shape.h"
+#include "P2World.h"
 
+using namespace std;
 using namespace glm;
 
+
 /*******************************************************/
-P2Body::P2Body(): 
-	mAngularVelocity(0), mTorque(0), mMass(1), mInvMass(1), mInertia(1), mInvInertia(1), mGravityScale(0)
+P2Body::P2Body(const P2BodyConfig& bodyConfig) :
+	mTransform(bodyConfig.Position, bodyConfig.Rotation), mLinearVelocity(bodyConfig.LinearVelocity), mAngularVelocity(bodyConfig.AngularVelocity),
+	mForce(0), mTorque(0), mWorld(nullptr), mFixture(nullptr), mMass(0), mInvMass(0), mInertia(0), mInvInertia(0), mGravityScale(bodyConfig.GravityScale)
 {
+}
+
+/*******************************************************/
+P2Body::~P2Body()
+{
+	mFixture.reset();
+}
+
+/*******************************************************/
+shared_ptr<P2Fixture> P2Body::CreateFixture(const P2FixtureConfig& fixtureConfig, bool replaceIfExists)
+{
+	if (mFixture == nullptr || mFixture != nullptr && replaceIfExists)
+	{
+		if (mFixture == nullptr)
+		{
+			mFixture = make_shared<P2Fixture>();
+		}
+		mFixture->Create(*this, fixtureConfig);
+	}
+
+	return mFixture;
 }
 
 /*******************************************************/
@@ -85,18 +110,6 @@ void P2Body::SetTorque(const float32_t torque)
 }
 
 /*******************************************************/
-std::shared_ptr<P2Fixture> P2Body::GetFixture() const
-{
-	return mFixture;
-}
-
-/*******************************************************/
-void P2Body::SetFixture(const std::shared_ptr<P2Fixture>& p2Fixture)
-{
-	mFixture = p2Fixture;
-}
-
-/*******************************************************/
 float32_t P2Body::GetGravityScale() const
 {
 	return mGravityScale;
@@ -106,6 +119,18 @@ float32_t P2Body::GetGravityScale() const
 void P2Body::SetGravityScale(const float32_t gravityScale)
 {
 	mGravityScale = gravityScale;
+}
+
+/*******************************************************/
+shared_ptr<P2Fixture> P2Body::GetFixture() const
+{
+	return mFixture;
+}
+
+/*******************************************************/
+P2World* P2Body::GetWorld() const
+{
+	return mWorld;
 }
 
 /*******************************************************/

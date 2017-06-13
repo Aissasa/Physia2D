@@ -3,21 +3,35 @@
 #include "glm/glm.hpp"
 
 class P2Shape;
+class P2Body;
+
+/** Struct that encapsulates the configuration of a fixture.
+*/
+struct P2FixtureConfig
+{
+	P2FixtureConfig(): 
+		Shape(nullptr), Density(0), Bounciness(0), Friction(0.3f)
+	{
+	}
+
+	P2Shape* Shape;
+	glm::float32_t Density;
+	glm::float32_t Bounciness;
+	glm::float32_t Friction;
+};
 
 /** Class to encapsulate the shape and non geometrical attributes of a body.
+ * It can only created from a P2Body
 */
-class P2Fixture final
+class P2Fixture
 {
 public:
 
-	// todo think about adding create, clone and destroy methods
-	// todo also think about adding a struct to init a fixture
+	P2Fixture(const float density = 0.0f, const float bounciness = 0.0f, const float friction = 0.3f, std::shared_ptr<P2Shape> shape = nullptr);
+	virtual ~P2Fixture() = default;
 
-	P2Fixture(std::shared_ptr<P2Shape> shape = nullptr, const float density = 0.0f, const float bounciness = 0.0f, const float friction = 0.3f);
-	~P2Fixture() = default;
-
+	P2Body* GetBody() const;
 	std::shared_ptr<P2Shape> GetShape() const;
-	void SetShape(const std::shared_ptr<P2Shape>& p2Shape);
 
 	glm::float32_t GetDensity() const;
 	void SetDensity(const glm::float32_t density);
@@ -29,6 +43,13 @@ public:
 	void SetFriction(const glm::float32_t friction);
 
 private:
+
+	//friend class P2World;
+	friend class P2Body;
+
+	void Create(P2Body& body, const P2FixtureConfig& fixtureConfig);
+
+	P2Body* mBody;
 
 	std::shared_ptr<P2Shape> mShape;
 	glm::float32_t mDensity;

@@ -1,18 +1,32 @@
 #include "pch.h"
 #include "P2CircleShape.h"
 
+using namespace std;
 using namespace glm;
 
 /*******************************************************/
-P2CircleShape::P2CircleShape(): mPosition(0), mRadius(0)
+P2CircleShape::P2CircleShape(vec2 position, float32_t radius): 
+	mPosition(position), mRadius(radius)
 {
+	mType = EType::Circle;
+}
+
+/*******************************************************/
+P2Shape* P2CircleShape::Clone()
+{
+	P2CircleShape* newShape = new P2CircleShape();
+	newShape->SetPosition(mPosition);
+	newShape->SetRadius(mRadius);
+	newShape->SetType(mType);
+
+	return newShape;
 }
 
 /*******************************************************/
 P2AABB P2CircleShape::ComputeAABB(const P2Transform& transform) const
 {
 	UNREFERENCED_PARAMETER(transform);
-
+	// todo implement aabb
 	return P2AABB();
 }
 

@@ -4,11 +4,20 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="MathTest.cpp" />
     <ClCompile Include="SampleTestClass.cpp" />
+    <ClCompile Include="BodyInitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Files\Test.json">
+      <Filter>Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Files">
+      <UniqueIdentifier>{3c96e483-49a3-488b-a4d6-0905b6b6a804}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

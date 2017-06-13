@@ -2,22 +2,35 @@
 #include "P2Fixture.h"
 #include "P2Shape.h"
 
+using namespace std;
+using namespace glm;
+
 /*******************************************************/
-P2Fixture::P2Fixture(std::shared_ptr<P2Shape> shape, const float density, const float bounciness, const float friction):
-	mShape(shape), mDensity(density), mBounciness(bounciness), mFriction(friction)
+P2Fixture::P2Fixture(const float density, const float bounciness, const float friction, std::shared_ptr<P2Shape> shape): 
+	mBody(nullptr), mShape(shape), mDensity(density), mBounciness(bounciness), mFriction(friction)
 {
+}
+
+/*******************************************************/
+void P2Fixture::Create(P2Body& body, const P2FixtureConfig& fixtureConfig)
+{
+	mBody = &body;
+	mShape = shared_ptr<P2Shape>(fixtureConfig.Shape->Clone());
+	mDensity = fixtureConfig.Density;
+	mBounciness = fixtureConfig.Bounciness;
+	mFriction = fixtureConfig.Friction;
+}
+
+/*******************************************************/
+P2Body* P2Fixture::GetBody() const
+{
+	return mBody;
 }
 
 /*******************************************************/
 std::shared_ptr<P2Shape> P2Fixture::GetShape() const
 {
 	return mShape;
-}
-
-/*******************************************************/
-void P2Fixture::SetShape(const std::shared_ptr<P2Shape>& p2Shape)
-{
-	mShape = p2Shape;
 }
 
 /*******************************************************/

@@ -9,6 +9,8 @@
 #include <cstdint>
 #include <memory>
 #include <algorithm>
+#include <iostream>
+#include <fstream>
 
 // glm
 #include "glm/glm.hpp"

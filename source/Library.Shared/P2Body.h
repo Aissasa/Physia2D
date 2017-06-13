@@ -1,23 +1,40 @@
 #pragma once
 
 #include <glm/detail/type_vec2.hpp>
-#include "P2Math.h"
 #include <memory>
+#include "P2Math.h"
+#include "P2Fixture.h"
 
-class P2Fixture;
+class P2World;
 
-// todo add init struct for body
+/** Struct that encapsulates the configuration of a body.
+*/
+struct P2BodyConfig
+{
+	P2BodyConfig():
+		Position(0), Rotation(0), LinearVelocity(0), AngularVelocity(0), GravityScale(0)
+	{
+	}
+
+	glm::vec2 Position;
+	glm::float32_t Rotation;
+	glm::vec2 LinearVelocity;
+	glm::float32_t AngularVelocity;
+	glm::float32_t GravityScale;
+};
 
 /** Class representing a Rigidbody.
 */
-class P2Body final
+class P2Body
 {
 public:
 
 	// todo add body types enum : static, dynamic, kinamatic
 
-	P2Body();
-	~P2Body() = default;
+	P2Body(const P2BodyConfig& bodyConfig);
+	virtual ~P2Body();
+
+	std::shared_ptr<P2Fixture> CreateFixture(const P2FixtureConfig& fixtureConfig, bool replaceIfExists = true);
 
 	// in case the mass data of the shape changed
 	void ResetMassData();
@@ -38,11 +55,11 @@ public:
 	glm::float32_t GetTorque() const;
 	void SetTorque(const glm::float32_t torque);
 
-	std::shared_ptr<P2Fixture> GetFixture() const;
-	void SetFixture(const std::shared_ptr<P2Fixture>& p2Fixture);
-
 	glm::float32_t GetGravityScale() const;
 	void SetGravityScale(const glm::float32_t gravityScale);
+
+	std::shared_ptr<P2Fixture> GetFixture() const;
+	P2World* GetWorld() const;
 
 	glm::float32_t GetMass() const;
 	glm::float32_t GetInvMass() const;
@@ -51,6 +68,8 @@ public:
 
 private:
 
+	friend class P2World;
+
 	P2Transform mTransform;
 	glm::vec2 mLinearVelocity;
 	glm::float32_t mAngularVelocity;
@@ -58,8 +77,7 @@ private:
 	glm::vec2 mForce;
 	glm::float32_t mTorque;
 
-	// todo add world
-
+	P2World* mWorld;
 	std::shared_ptr<P2Fixture> mFixture;
 
 	glm::float32_t mMass; 

@@ -58,7 +58,7 @@ namespace UnitTestLibraryDesktop
 		}
 
 		/*******************************************************/
-		TEST_METHOD(ArithmiticOperationsOnVec2)
+		TEST_METHOD(ArithmeticOperationsOnVec2)
 		{
 			vec2 v1(1, 0);
 			vec2 v2(0, 1);

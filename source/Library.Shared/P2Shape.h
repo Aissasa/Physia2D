@@ -16,12 +16,12 @@ struct P2MassData
 */
 struct P2AABB
 {
-	P2AABB(const glm::vec2& lowwerVert = glm::vec2(0), const glm::vec2& upperVert = glm::vec2(0))
-		: LowwerVert(lowwerVert), UpperVert(upperVert)
+	P2AABB(const glm::vec2& lowerVert = glm::vec2(0), const glm::vec2& upperVert = glm::vec2(0))
+		: LowerVert(lowerVert), UpperVert(upperVert)
 	{
 	}
 
-	glm::vec2 LowwerVert;
+	glm::vec2 LowerVert;
 	glm::vec2 UpperVert;
 };
 
@@ -31,13 +31,35 @@ class P2Shape
 {
 public:
 
-	// todo add shape types enum and type field
-	// todo think about adding a struct to init a shape
+	// todo add radius here
 
-	P2Shape() = default;
+	enum class EType
+	{
+		Circle,
+		Polygon
+	};
+
 	virtual ~P2Shape() = default;
 
+	virtual P2Shape* Clone() = 0;
 	virtual P2AABB ComputeAABB(const P2Transform& transform) const = 0;
 	virtual P2MassData ComputeMass(const glm::float32_t density) const = 0;
+
+	EType GetType() const;
+	void SetType(const EType type);
+
+protected:
+
+	EType mType;
 };
+
+inline P2Shape::EType P2Shape::GetType() const
+{
+	return mType;
+}
+
+inline void P2Shape::SetType(const EType type)
+{
+	mType = type;
+}
 
