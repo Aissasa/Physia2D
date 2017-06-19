@@ -6,3 +6,4 @@ source/UnitTest.Library.Desktop/bin/
 *.idb
 *.tlog
 build/packages/
+*.opendb

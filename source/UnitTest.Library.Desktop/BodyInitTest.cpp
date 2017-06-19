@@ -5,11 +5,13 @@
 #include "P2World.h"
 #include "P2CircleShape.h"
 #include "JsonParser.h"
+#include "P2PolygonShape.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
 using namespace glm;
 using namespace rapidjson;
+using namespace Physia2D;
 
 namespace UnitTestLibraryDesktop
 {
@@ -123,7 +125,7 @@ namespace UnitTestLibraryDesktop
 
 			P2CircleShape circleShape(vec2(shapeValue["Position"]["x"].GetFloat(), shapeValue["Position"]["y"].GetFloat()), shapeValue["Radius"].GetFloat());
 			Assert::AreEqual(3.0f, circleShape.GetRadius());
-			Assert::IsTrue(vec2(0.2f, 0.3f) == circleShape.GetPosition());
+			Assert::IsTrue(vec2(0.2f, 0.3f) == circleShape.GetCenterPosition());
 
 			P2FixtureConfig fixtureConfig;
 			fixtureConfig.Density = fixtureValue["Density"].GetFloat();
@@ -144,10 +146,12 @@ namespace UnitTestLibraryDesktop
 		}
 
 		/*******************************************************/
-		TEST_METHOD(InitWithJsonParser)
+		TEST_METHOD(InitWithJsonParserCircleShape)
 		{
 			JsonParser& parser = JsonParser::GetInstance();
 			auto body = parser.ParseBody("Files/Test.json");
+
+			JsonParser::GetInstance().DeleteParser();
 
 			Assert::IsTrue(body->GetWorld() == nullptr);
 			Assert::IsTrue(vec2(0, 0.8f) == body->GetTransform().Position);
@@ -161,8 +165,38 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(0.2f, body->GetFixture()->GetBounciness());
 			Assert::AreEqual(1.0f, body->GetFixture()->GetFriction());
 			Assert::IsTrue(body->GetFixture()->GetShape()->GetType() == P2Shape::EType::Circle);
+			auto shape = body->GetFixture()->GetShape()->As<P2CircleShape>();
+			Assert::IsNotNull(shape);
+			Assert::AreEqual(3.0f, shape->GetRadius());
+			Assert::IsTrue(vec2(0.2f, 0.3f) == shape->GetCenterPosition());
+		}
+
+		/*******************************************************/
+		TEST_METHOD(InitWithJsonParserPolygonShape)
+		{
+			JsonParser& parser = JsonParser::GetInstance();
+			auto body = parser.ParseBody("Files/Test2.json");
 
 			JsonParser::GetInstance().DeleteParser();
+
+			Assert::IsTrue(body->GetWorld() == nullptr);
+			Assert::IsTrue(vec2(0, 0.8f) == body->GetTransform().Position);
+			Assert::AreEqual(0.2f, body->GetTransform().Rotation);
+			Assert::IsTrue(vec2(2, 8) == body->GetLinearVelocity());
+			Assert::AreEqual(0.5f, body->GetAngularVelocity());
+			Assert::AreEqual(1.0f, body->GetGravityScale());
+
+			Assert::IsTrue(body->GetFixture() != nullptr);
+			Assert::AreEqual(0.9f, body->GetFixture()->GetDensity());
+			Assert::AreEqual(0.2f, body->GetFixture()->GetBounciness());
+			Assert::AreEqual(1.0f, body->GetFixture()->GetFriction());
+			Assert::IsTrue(body->GetFixture()->GetShape()->GetType() == P2Shape::EType::Polygon);
+			auto shape = body->GetFixture()->GetShape()->As<P2PolygonShape>();
+			Assert::IsNotNull(shape);
+			Assert::AreEqual(4U, shape->VerticesCount());
+			Assert::IsTrue(vec2() == shape->GetVertices().front());
+			Assert::IsTrue(vec2(0, 2) == shape->GetVertices().back());
+
 		}
 
 #pragma endregion

@@ -6,69 +6,101 @@
 #include "P2Body.h"
 #include "P2Fixture.h"
 #include "P2CircleShape.h"
+#include "P2PolygonShape.h"
 
 using namespace std;
 using namespace glm;
 using namespace rapidjson;
 
-JsonParser* JsonParser::sInstance = nullptr;
-
-/*******************************************************/
-JsonParser& JsonParser::GetInstance()
+namespace Physia2D
 {
-	if (sInstance == nullptr)
+	JsonParser* JsonParser::sInstance = nullptr;
+
+	/*******************************************************/
+	JsonParser& JsonParser::GetInstance()
 	{
-		sInstance = new JsonParser();
+		if (sInstance == nullptr)
+		{
+			sInstance = new JsonParser();
+		}
+
+		return *sInstance;
 	}
 
-	return *sInstance;
-}
+	/*******************************************************/
+	shared_ptr<P2Body> JsonParser::ParseBody(const string& filePath) const
+	{
+		ifstream ifs(filePath);
+		IStreamWrapper ist(ifs);
 
-/*******************************************************/
-shared_ptr<P2Body> JsonParser::ParseBody(const string& filePath) const
-{
-	ifstream ifs(filePath);
-	IStreamWrapper ist(ifs);
+		Document jsonDoc;
+		jsonDoc.ParseStream(ist);
+		assert(jsonDoc.IsObject());
 
-	Document jsonDoc;
-	jsonDoc.ParseStream(ist);
-	assert(jsonDoc.IsObject());
+		return ParseBody(jsonDoc);
+	}
 
-	return ParseBody(jsonDoc);
-}
+	/*******************************************************/
+	shared_ptr<P2Body> JsonParser::ParseBody(const Value& doc) const
+	{
+		P2BodyConfig bodyConfig;
+		bodyConfig.Position.x = doc["Position"]["x"].GetFloat();
+		bodyConfig.Position.y = doc["Position"]["y"].GetFloat();
+		bodyConfig.Rotation = doc["Rotation"].GetFloat();
+		bodyConfig.LinearVelocity.x = doc["LinearVel"]["x"].GetFloat();
+		bodyConfig.LinearVelocity.y = doc["LinearVel"]["y"].GetFloat();
+		bodyConfig.AngularVelocity = doc["AngularVel"].GetFloat();
+		bodyConfig.GravityScale = doc["GravityScale"].GetFloat();
 
-/*******************************************************/
-shared_ptr<P2Body> JsonParser::ParseBody(const Value& doc) const
-{
-	P2BodyConfig bodyConfig;
-	bodyConfig.Position.x = doc["Position"]["x"].GetFloat();
-	bodyConfig.Position.y = doc["Position"]["y"].GetFloat();
-	bodyConfig.Rotation = doc["Rotation"].GetFloat();
-	bodyConfig.LinearVelocity.x = doc["LinearVel"]["x"].GetFloat();
-	bodyConfig.LinearVelocity.y = doc["LinearVel"]["y"].GetFloat();
-	bodyConfig.AngularVelocity = doc["AngularVel"].GetFloat();
-	bodyConfig.GravityScale = doc["GravityScale"].GetFloat();
+		shared_ptr<P2Body> body = make_shared<P2Body>(bodyConfig);
 
-	shared_ptr<P2Body> body = make_shared<P2Body>(bodyConfig);
+		const Value& fixtureValue = doc["Fixture"];
+		const Value& shapeValue = fixtureValue["Shape"];
 
-	const Value& fixtureValue = doc["Fixture"];
-	const Value& shapeValue = fixtureValue["Shape"];
+		P2FixtureConfig fixtureConfig;
+		fixtureConfig.Density = fixtureValue["Density"].GetFloat();
+		fixtureConfig.Bounciness = fixtureValue["Bounciness"].GetFloat();
+		fixtureConfig.Friction = fixtureValue["Friction"].GetFloat();
 
-	P2CircleShape circleShape(vec2(shapeValue["Position"]["x"].GetFloat(), shapeValue["Position"]["y"].GetFloat()), shapeValue["Radius"].GetFloat());
+		unique_ptr<P2Shape> shape;
 
-	P2FixtureConfig fixtureConfig;
-	fixtureConfig.Density = fixtureValue["Density"].GetFloat();
-	fixtureConfig.Bounciness = fixtureValue["Bounciness"].GetFloat();
-	fixtureConfig.Friction = fixtureValue["Friction"].GetFloat();
-	fixtureConfig.Shape = &circleShape;
+		switch (shapeValue["Type"].GetInt())
+		{
+			// polygon
+			case 2:
+			{
+				shape = make_unique<P2PolygonShape>();
 
-	shared_ptr<P2Fixture> fixture = body->CreateFixture(fixtureConfig);
+				const Value& vertsValue = shapeValue["Vertices"];
+				vector<vec2> vertices;
 
-	return body;
-}
+				for (auto& value : vertsValue.GetArray())
+				{
+					vertices.push_back(vec2(value["x"].GetFloat(), value["y"].GetFloat()));
+				}
 
-/*******************************************************/
-void JsonParser::DeleteParser() const
-{
-	delete sInstance;
+				shape->As<P2PolygonShape>()->SetVertices(vertices);
+				break;
+			}
+
+			case 1:
+			default:
+			{
+				shape = make_unique<P2CircleShape>(vec2(shapeValue["Position"]["x"].GetFloat(), shapeValue["Position"]["y"].GetFloat()), shapeValue["Radius"].GetFloat());
+				break;
+			}
+		}
+
+		fixtureConfig.Shape = shape.get();
+		shared_ptr<P2Fixture> fixture = body->CreateFixture(fixtureConfig);
+
+		return body;
+	}
+
+	/*******************************************************/
+	void JsonParser::DeleteParser() const
+	{
+		delete sInstance;
+		sInstance = nullptr;
+	}
 }

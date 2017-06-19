@@ -17,6 +17,15 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParser.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2Shape.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2PolygonShape.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2Math.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -41,6 +50,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonParser.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)RTTI.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2PolygonShape.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -48,6 +63,9 @@
     </Filter>
     <Filter Include="Tools">
       <UniqueIdentifier>{90c2ff95-96a0-4161-849d-ab6447df436b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{dd9a6e34-d452-4aa6-ac24-0a18c2730fcc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

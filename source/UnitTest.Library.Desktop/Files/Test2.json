@@ -15,12 +15,25 @@
 		"Bounciness": 0.2,
 		"Friction": 1,
 		"Shape": {
-			"Type": 1,
-			"Position": {
-				"x": 0.2,
-				"y": 0.3
-			},
-			"Radius": 3
+			"Type": 2,
+			"Vertices": [
+				{
+					"x": 0,
+					"y": 0
+				},
+				{
+					"x": 2,
+					"y": 0
+				},
+				{
+					"x": 2,
+					"y": 2
+				},
+				{
+					"x": 0,
+					"y": 2
+				}
+			]
 		}
 	}
 }

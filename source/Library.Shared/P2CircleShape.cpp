@@ -4,66 +4,75 @@
 using namespace std;
 using namespace glm;
 
-/*******************************************************/
-P2CircleShape::P2CircleShape(vec2 position, float32_t radius): 
-	mPosition(position), mRadius(radius)
+namespace Physia2D
 {
-	mType = EType::Circle;
-}
+	RTTI_DEFINITIONS(P2CircleShape)
 
-/*******************************************************/
-P2Shape* P2CircleShape::Clone()
-{
-	P2CircleShape* newShape = new P2CircleShape();
-	newShape->SetPosition(mPosition);
-	newShape->SetRadius(mRadius);
-	newShape->SetType(mType);
+	/*******************************************************/
+	P2CircleShape::P2CircleShape(vec2 position, float32_t radius) :
+		mCenterPosition(position), mRadius(radius)
+	{
+		mType = EType::Circle;
+	}
 
-	return newShape;
-}
+	/*******************************************************/
+	P2Shape* P2CircleShape::Clone()
+	{
+		P2CircleShape* newShape = new P2CircleShape();
+		newShape->SetType(mType);
+		newShape->SetCenterPosition(mCenterPosition);
+		newShape->SetRadius(mRadius);
 
-/*******************************************************/
-P2AABB P2CircleShape::ComputeAABB(const P2Transform& transform) const
-{
-	UNREFERENCED_PARAMETER(transform);
-	// todo implement aabb
-	return P2AABB();
-}
+		return newShape;
+	}
 
-/*******************************************************/
-P2MassData P2CircleShape::ComputeMass(const float32_t density) const
-{
-	P2MassData massData;
-	float32_t sqrRad = mRadius * mRadius;
+	/*******************************************************/
+	P2AABB P2CircleShape::ComputeAABB(const P2Transform& transform) const
+	{
+		UNREFERENCED_PARAMETER(transform); // todo multiply verts by this to get true position in world
 
-	float32_t area = pi<float32_t>() * sqrRad;
-	massData.Mass = area * density;
-	massData.Center = mPosition;
-	massData.Inertia = 0.5f * massData.Mass * sqrRad;
+		P2AABB aabb;
+		aabb.LowerVert = mCenterPosition - mRadius;
+		aabb.UpperVert = mCenterPosition + mRadius;
 
-	return massData;
-}
+		return aabb;
+	}
 
-/*******************************************************/
-vec2 P2CircleShape::GetPosition() const
-{
-	return mPosition;
-}
+	/*******************************************************/
+	P2MassData P2CircleShape::ComputeMass(const float32_t density) const
+	{
+		P2MassData massData;
+		float32_t sqrRad = mRadius * mRadius;
 
-/*******************************************************/
-void P2CircleShape::SetPosition(const vec2& position)
-{
-	mPosition = position;
-}
+		float32_t area = pi<float32_t>() * sqrRad;
+		massData.Mass = area * density;
+		massData.Center = mCenterPosition;
+		massData.Inertia = 0.5f * massData.Mass * sqrRad;
 
-/*******************************************************/
-detail::float32 P2CircleShape::GetRadius() const
-{
-	return mRadius;
-}
+		return massData;
+	}
 
-/*******************************************************/
-void P2CircleShape::SetRadius(const float32_t radius)
-{
-	mRadius = radius;
+	/*******************************************************/
+	vec2 P2CircleShape::GetCenterPosition() const
+	{
+		return mCenterPosition;
+	}
+
+	/*******************************************************/
+	void P2CircleShape::SetCenterPosition(const vec2& position)
+	{
+		mCenterPosition = position;
+	}
+
+	/*******************************************************/
+	detail::float32 P2CircleShape::GetRadius() const
+	{
+		return mRadius;
+	}
+
+	/*******************************************************/
+	void P2CircleShape::SetRadius(const float32_t radius)
+	{
+		mRadius = radius;
+	}
 }

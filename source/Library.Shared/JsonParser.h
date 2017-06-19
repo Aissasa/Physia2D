@@ -3,22 +3,25 @@
 #include <memory>
 #include <document.h>
 
-class P2World;
-class P2Body;
-
-class JsonParser
+namespace Physia2D
 {
-public:
+	class P2World;
+	class P2Body;
 
-	static JsonParser& GetInstance();
-	std::shared_ptr<P2World> ParseWorld(const std::string& filePath);
-	std::shared_ptr<P2Body> ParseBody(const std::string& filePath) const;
-	std::shared_ptr<P2Body> ParseBody(const rapidjson::Value& doc) const;
+	class JsonParser final
+	{
+	public:
 
-	void DeleteParser() const;
+		static JsonParser& GetInstance();
+		std::shared_ptr<P2World> ParseWorld(const std::string& filePath);
+		std::shared_ptr<P2Body> ParseBody(const std::string& filePath) const;
+		std::shared_ptr<P2Body> ParseBody(const rapidjson::Value& doc) const;
 
-private:
+		void DeleteParser() const;
 
-	JsonParser() = default;
-	static JsonParser* sInstance;
-};
+	private:
+
+		JsonParser() = default;
+		static JsonParser* sInstance;
+	};
+}
