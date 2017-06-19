@@ -24,10 +24,12 @@ namespace Physia2D
 		glm::float32_t GetRadius() const;
 		void SetRadius(const glm::float32_t radius);
 
+		glm::float32_t GetRadiusSqr() const;
+
 	private:
 
 		glm::vec2 mCenterPosition;
 		glm::float32_t mRadius;
-
+		glm::float32_t mRadiusSqr;
 	};
 }

@@ -26,6 +26,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)P2Math.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2Collision.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -54,6 +57,9 @@
       <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)P2PolygonShape.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2Collision.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>

@@ -22,6 +22,7 @@ namespace Physia2D
 	private:
 
 		JsonParser() = default;
+		~JsonParser() = default;
 		static JsonParser* sInstance;
 	};
 }

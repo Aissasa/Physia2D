@@ -29,10 +29,13 @@ namespace Physia2D
 		glm::vec2 Vec2CrossProduct(glm::vec2 v1, glm::vec2 v2) const;
 		glm::float32_t LengthSquared(glm::vec2 vec) const;
 
+		glm::float32_t MaxFloat() const;
+
 	private:
 
 		static MathHelper* sInstance;
 		MathHelper() = default;
+		~MathHelper() = default;
 	};
 
 	// todo add rotation struct that has cos and sin, better than having the angle

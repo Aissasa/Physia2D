@@ -13,6 +13,7 @@ namespace Physia2D
 		mCenterPosition(position), mRadius(radius)
 	{
 		mType = EType::Circle;
+		mRadiusSqr = mRadius * mRadius;
 	}
 
 	/*******************************************************/
@@ -74,5 +75,12 @@ namespace Physia2D
 	void P2CircleShape::SetRadius(const float32_t radius)
 	{
 		mRadius = radius;
+		mRadiusSqr = mRadius * mRadius;
+	}
+
+	/*******************************************************/
+	float32_t P2CircleShape::GetRadiusSqr() const
+	{
+		return mRadiusSqr;
 	}
 }

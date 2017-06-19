@@ -37,4 +37,10 @@ namespace Physia2D
 	{
 		return vec.x * vec.x + vec.y * vec.y;
 	}
+
+	/*******************************************************/
+	float32_t MathHelper::MaxFloat() const
+	{
+		return FLT_MAX;
+	}
 }

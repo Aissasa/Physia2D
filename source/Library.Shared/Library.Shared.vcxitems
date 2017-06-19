@@ -17,6 +17,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonParser.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)P2Body.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)P2CircleShape.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2Collision.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)P2Fixture.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)P2Math.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)P2PolygonShape.h" />
@@ -29,6 +30,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParser.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)P2Body.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)P2CircleShape.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2Collision.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)P2Fixture.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)P2Math.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)P2PolygonShape.cpp" />

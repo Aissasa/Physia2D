@@ -1,21 +1,55 @@
 #include "pch.h"
-#include "GLFW/glfw3.h"
+#include <SFML/Graphics.hpp>
 
-/************************************************************************/
-static void error_callback(int error, const char* description)
+sf::ContextSettings InitOpenGLSettings()
 {
-	fprintf(stderr, "Error: %s\nError Number: %d\n", description, error);
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 8;
+
+	return settings;
 }
 
-/************************************************************************/
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+/***************************************************************************************************************************/
+void DrawWorld(sf::RenderWindow& window)
 {
-	mods; scancode;
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GLFW_TRUE);
+	// create an empty shape
+	sf::ConvexShape convex;
+
+	convex.setPosition(50, 50);
+	convex.setFillColor(sf::Color::Red);
+	// resize it to 5 points
+	convex.setPointCount(5);
+
+	// define the points
+	convex.setPoint(0, sf::Vector2f(0, 0));
+	convex.setPoint(1, sf::Vector2f(150, 10));
+	convex.setPoint(2, sf::Vector2f(120, 90));
+	convex.setPoint(3, sf::Vector2f(30, 100));
+	convex.setPoint(4, sf::Vector2f(0, 50));
+
+	window.draw(convex);
+
+	// define a triangle
+	sf::CircleShape triangle(80, 3);
+	triangle.setPosition(150, 150);
+	triangle.setFillColor(sf::Color::Green);
+
+	// define a square
+	sf::CircleShape square(80, 4);
+	square.setPosition(500, 500);
+	square.setFillColor(sf::Color::Blue);
+
+	// define an octagon
+	sf::CircleShape octagon(80, 8);
+	octagon.setPosition(250, 250);
+	octagon.setFillColor(sf::Color::Cyan);
+
+	window.draw(triangle);
+	window.draw(square);
+	window.draw(octagon);
 }
 
-/************************************************************************/
+/***************************************************************************************************************************/
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
 	UNREFERENCED_PARAMETER(hInstance);
@@ -23,31 +57,32 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nShowCmd);
 
-	GLFWwindow* window;
-	glfwSetErrorCallback(error_callback);
 
-	if (!glfwInit())
-		exit(EXIT_FAILURE);
+	sf::ContextSettings settings = InitOpenGLSettings();
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	// create the window
+	sf::RenderWindow window(sf::VideoMode(1200, 800), "Physia2D testbed", sf::Style::Default, settings);
 
-	window = glfwCreateWindow(640, 480, "Simple example: Press escape to exit.", NULL, NULL);
-	if (!window)
+	// run the program as long as the window is open
+	while (window.isOpen())
 	{
-		glfwTerminate();
-		exit(EXIT_FAILURE);
+		// check all the window's events that were triggered since the last iteration of the loop
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			// "close requested" event: we close the window
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+
+		// clear the window with black color
+		window.clear(sf::Color::Black);
+
+		DrawWorld(window);
+
+		// end the current frame
+		window.display();
 	}
 
-	glfwSetKeyCallback(window, key_callback);
-	glfwMakeContextCurrent(window);
-
-	while (!glfwWindowShouldClose(window))
-	{
-		glfwPollEvents();
-	}
-
-	glfwDestroyWindow(window);
-	glfwTerminate();
-	exit(EXIT_SUCCESS);
+	return 0;
 }
