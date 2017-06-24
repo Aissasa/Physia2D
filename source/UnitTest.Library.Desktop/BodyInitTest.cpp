@@ -151,8 +151,6 @@ namespace UnitTestLibraryDesktop
 			JsonParser& parser = JsonParser::GetInstance();
 			auto body = parser.ParseBody("Files/Test.json");
 
-			JsonParser::GetInstance().DeleteParser();
-
 			Assert::IsTrue(body->GetWorld() == nullptr);
 			Assert::IsTrue(vec2(0, 0.8f) == body->GetTransform().Position);
 			Assert::AreEqual(0.2f, body->GetTransform().Rotation);
@@ -177,8 +175,6 @@ namespace UnitTestLibraryDesktop
 			JsonParser& parser = JsonParser::GetInstance();
 			auto body = parser.ParseBody("Files/Test2.json");
 
-			JsonParser::GetInstance().DeleteParser();
-
 			Assert::IsTrue(body->GetWorld() == nullptr);
 			Assert::IsTrue(vec2(0, 0.8f) == body->GetTransform().Position);
 			Assert::AreEqual(0.2f, body->GetTransform().Rotation);
@@ -197,6 +193,9 @@ namespace UnitTestLibraryDesktop
 			Assert::IsTrue(vec2() == shape->GetVertices().front());
 			Assert::IsTrue(vec2(0, 2) == shape->GetVertices().back());
 
+			P2World world;
+			world.AddBody(body);
+			Assert::AreEqual(1U, world.GetBodies().size());
 		}
 
 #pragma endregion

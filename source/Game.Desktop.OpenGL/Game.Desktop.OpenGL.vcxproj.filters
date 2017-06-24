@@ -2,9 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="WorldRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="WorldRenderer.cpp" />
   </ItemGroup>
 </Project>

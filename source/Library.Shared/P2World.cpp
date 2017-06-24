@@ -24,7 +24,19 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	void P2World::DeleteBody(shared_ptr<P2Body> body)
+	bool P2World::AddBody(const shared_ptr<P2Body>& body)
+	{
+		if (body == nullptr)
+		{
+			return false;
+		}
+
+		mBodies.push_back(body);
+		return true;
+	}
+
+	/*******************************************************/
+	bool P2World::DeleteBody(const shared_ptr<P2Body>& body)
 	{
 		vector<shared_ptr<P2Body>>::iterator it;
 		for (it = mBodies.begin(); it != mBodies.end(); ++it)
@@ -32,13 +44,15 @@ namespace Physia2D
 			if (*it == body)
 			{
 				mBodies.erase(it);
-				break;
+				return true;;
 			}
 		}
+
+		return false;
 	}
 
 	/*******************************************************/
-	vector<shared_ptr<P2Body>> P2World::GetBodies() const
+	const vector<shared_ptr<P2Body>>& P2World::GetBodies() const
 	{
 		return mBodies;
 	}

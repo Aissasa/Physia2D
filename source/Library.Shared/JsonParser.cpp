@@ -14,17 +14,12 @@ using namespace rapidjson;
 
 namespace Physia2D
 {
-	JsonParser* JsonParser::sInstance = nullptr;
-
 	/*******************************************************/
 	JsonParser& JsonParser::GetInstance()
 	{
-		if (sInstance == nullptr)
-		{
-			sInstance = new JsonParser();
-		}
+		static JsonParser sInstance;
 
-		return *sInstance;
+		return sInstance;
 	}
 
 	/*******************************************************/
@@ -95,12 +90,5 @@ namespace Physia2D
 		shared_ptr<P2Fixture> fixture = body->CreateFixture(fixtureConfig);
 
 		return body;
-	}
-
-	/*******************************************************/
-	void JsonParser::DeleteParser() const
-	{
-		delete sInstance;
-		sInstance = nullptr;
 	}
 }

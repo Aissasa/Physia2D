@@ -12,9 +12,10 @@ namespace Physia2D
 		~P2World() = default;
 
 		std::shared_ptr<P2Body> CreateBody(const P2BodyConfig& bodyConfig);
-		void DeleteBody(std::shared_ptr<P2Body> body);
+		bool AddBody(const std::shared_ptr<P2Body>& body);
+		bool DeleteBody(const std::shared_ptr<P2Body>& body);
 
-		std::vector<std::shared_ptr<P2Body>> GetBodies() const;
+		const std::vector<std::shared_ptr<P2Body>>& GetBodies() const;
 
 		glm::vec2 GetGravity() const;
 		void SetGravity(const glm::vec2& gravity);

@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\build\packages\GLMathematics.0.9.5.4\build\native\GLMathematics.props" Condition="Exists('..\..\build\packages\GLMathematics.0.9.5.4\build\native\GLMathematics.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,9 +17,6 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BD64EBF7-CB11-49E5-90B8-BDA036BBF6BD}</ProjectGuid>
@@ -103,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(SolutionDir)\..\external\rapidjson\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\external\rapidjson\;$(MSBuildThisFileDirectory);%(AdditionalIncludeDirectories);$(SolutionDir)\..\external\glm\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -120,7 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(SolutionDir)\..\external\rapidjson\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\external\rapidjson\;$(MSBuildThisFileDirectory);%(AdditionalIncludeDirectories);$(SolutionDir)\..\external\glm\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,7 +135,7 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(SolutionDir)\..\external\rapidjson\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\external\rapidjson\;$(MSBuildThisFileDirectory);%(AdditionalIncludeDirectories);$(SolutionDir)\..\external\glm\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -160,7 +156,7 @@
       <SDLCheck>true</SDLCheck>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(SolutionDir)\..\external\rapidjson\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\external\rapidjson\;$(MSBuildThisFileDirectory);%(AdditionalIncludeDirectories);$(SolutionDir)\..\external\glm\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,10 +168,4 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\build\packages\GLMathematics.0.9.5.4\build\native\GLMathematics.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\build\packages\GLMathematics.0.9.5.4\build\native\GLMathematics.props'))" />
-  </Target>
 </Project>

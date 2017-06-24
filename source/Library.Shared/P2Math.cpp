@@ -6,23 +6,11 @@ using namespace glm;
 
 namespace Physia2D
 {
-	MathHelper* MathHelper::sInstance = nullptr;
-
 	/*******************************************************/
 	MathHelper& MathHelper::GetInstance()
 	{
-		if (sInstance == nullptr)
-		{
-			sInstance = new MathHelper();
-		}
-
-		return *sInstance;
-	}
-
-	/*******************************************************/
-	void MathHelper::DeleteMathHelper() const
-	{
-		delete sInstance;
+		static MathHelper sInstance;
+		return sInstance;
 	}
 
 	/*******************************************************/

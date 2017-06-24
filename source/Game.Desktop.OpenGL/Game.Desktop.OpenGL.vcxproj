@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="WorldRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -34,6 +35,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="WorldRenderer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1C5AE45B-AD61-4DAF-B0EC-14FBE313CC93}</ProjectGuid>
@@ -114,7 +116,7 @@
       <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\source\Library.Desktop\;$(SolutionDir)..\source\Library.Shared\;$(SolutionDir)..\external\SFML-2.4.2\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\source\Library.Desktop\;$(SolutionDir)..\source\Library.Shared\;$(SolutionDir)..\external\SFML-2.4.2\include\;$(SolutionDir)\..\external\glm\;$(SolutionDir)\..\external\rapidjson\</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -124,6 +126,12 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\external\SFML-2.4.2\lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;sfml-system-s-d.lib;sfml-graphics-s-d.lib;sfml-audio-s-d.lib;sfml-network-s-d.lib;sfml-window-s-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>robocopy "$(ProjectDir)Files" "$(OutDir)Files" /MIR /R:0 /W:0
+
+set rce=%errorlevel%
+if not %rce%==1 exit %rce% else exit 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -133,7 +141,7 @@
       <PreprocessorDefinitions>SFML_STATIC;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\source\Library.Desktop\;$(SolutionDir)..\source\Library.Shared\;$(SolutionDir)..\external\SFML-2.4.2\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\source\Library.Desktop\;$(SolutionDir)..\source\Library.Shared\;$(SolutionDir)..\external\SFML-2.4.2\include\;$(SolutionDir)\..\external\glm\;$(SolutionDir)\..\external\rapidjson\</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -143,6 +151,12 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\external\SFML-2.4.2\lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;sfml-system-s-d.lib;sfml-graphics-s-d.lib;sfml-audio-s-d.lib;sfml-network-s-d.lib;sfml-window-s-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>robocopy "$(ProjectDir)Files" "$(OutDir)Files" /MIR /R:0 /W:0
+
+set rce=%errorlevel%
+if not %rce%==1 exit %rce% else exit 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -154,7 +168,7 @@
       <PreprocessorDefinitions>SFML_STATIC;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\source\Library.Desktop\;$(SolutionDir)..\source\Library.Shared\;$(SolutionDir)..\external\SFML-2.4.2\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\source\Library.Desktop\;$(SolutionDir)..\source\Library.Shared\;$(SolutionDir)..\external\SFML-2.4.2\include\;$(SolutionDir)\..\external\glm\;$(SolutionDir)\..\external\rapidjson\</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -166,6 +180,12 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\external\SFML-2.4.2\lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;sfml-system-s.lib;sfml-graphics-s.lib;sfml-audio-s.lib;sfml-network-s.lib;sfml-window-s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>robocopy "$(ProjectDir)Files" "$(OutDir)Files" /MIR /R:0 /W:0
+
+set rce=%errorlevel%
+if not %rce%==1 exit %rce% else exit 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -177,7 +197,7 @@
       <PreprocessorDefinitions>SFML_STATIC;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\source\Library.Desktop\;$(SolutionDir)..\source\Library.Shared\;$(SolutionDir)..\external\SFML-2.4.2\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\source\Library.Desktop\;$(SolutionDir)..\source\Library.Shared\;$(SolutionDir)..\external\SFML-2.4.2\include\;$(SolutionDir)\..\external\glm\;$(SolutionDir)\..\external\rapidjson\</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -189,8 +209,13 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\external\SFML-2.4.2\lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;sfml-system-s.lib;sfml-graphics-s.lib;sfml-audio-s.lib;sfml-network-s.lib;sfml-window-s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>robocopy "$(ProjectDir)Files" "$(OutDir)Files" /MIR /R:0 /W:0
+
+set rce=%errorlevel%
+if not %rce%==1 exit %rce% else exit 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

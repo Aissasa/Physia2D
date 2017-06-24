@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\build\packages\GLMathematics.0.9.5.4\build\native\GLMathematics.props" Condition="Exists('..\..\build\packages\GLMathematics.0.9.5.4\build\native\GLMathematics.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -99,7 +98,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\source\Library.Desktop\;$(VCInstallDir)UnitTest\include;$(SolutionDir)\..\external\rapidjson\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\source\Library.Desktop\;$(VCInstallDir)UnitTest\include;$(SolutionDir)\..\external\glm\;$(SolutionDir)\..\external\rapidjson\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -128,7 +127,7 @@ if not %rce%==1 exit %rce% else exit 0</Command>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\source\Library.Desktop\;$(VCInstallDir)UnitTest\include;$(SolutionDir)\..\external\rapidjson\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\source\Library.Desktop\;$(VCInstallDir)UnitTest\include;$(SolutionDir)\..\external\glm\;$(SolutionDir)\..\external\rapidjson\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -159,7 +158,7 @@ if not %rce%==1 exit %rce% else exit 0</Command>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\source\Library.Desktop\;$(VCInstallDir)UnitTest\include;$(SolutionDir)\..\external\rapidjson\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\source\Library.Desktop\;$(VCInstallDir)UnitTest\include;$(SolutionDir)\..\external\glm\;$(SolutionDir)\..\external\rapidjson\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -192,7 +191,7 @@ if not %rce%==1 exit %rce% else exit 0</Command>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\source\Library.Desktop\;$(VCInstallDir)UnitTest\include;$(SolutionDir)\..\external\rapidjson\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\source\Library.Shared\;$(SolutionDir)\..\source\Library.Desktop\;$(VCInstallDir)UnitTest\include;$(SolutionDir)\..\external\glm\;$(SolutionDir)\..\external\rapidjson\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -246,14 +245,7 @@ if not %rce%==1 exit %rce% else exit 0</Command>
   <ItemGroup>
     <None Include="Files\Test.json" />
     <None Include="Files\Test2.json" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\build\packages\GLMathematics.0.9.5.4\build\native\GLMathematics.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\build\packages\GLMathematics.0.9.5.4\build\native\GLMathematics.props'))" />
-  </Target>
 </Project>

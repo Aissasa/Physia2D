@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/detail/type_vec2.hpp>
+#include "glm.hpp"
 
 namespace Physia2D
 {
@@ -23,8 +23,12 @@ namespace Physia2D
 	{
 	public:
 
+		MathHelper(const MathHelper&) = delete;
+		MathHelper(MathHelper&&) = delete;
+		MathHelper& operator=(const MathHelper&) = delete;
+		MathHelper& operator=(MathHelper&&) = delete;
+
 		static MathHelper& GetInstance();
-		void DeleteMathHelper() const;
 
 		glm::vec2 Vec2CrossProduct(glm::vec2 v1, glm::vec2 v2) const;
 		glm::float32_t LengthSquared(glm::vec2 vec) const;
@@ -33,7 +37,6 @@ namespace Physia2D
 
 	private:
 
-		static MathHelper* sInstance;
 		MathHelper() = default;
 		~MathHelper() = default;
 	};

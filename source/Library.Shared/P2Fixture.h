@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include "glm.hpp"
+
 namespace Physia2D
 {
 	class P2Shape;
@@ -27,7 +30,7 @@ namespace Physia2D
 	{
 	public:
 
-		P2Fixture(const float density = 0.0f, const float bounciness = 0.0f, const float friction = 0.3f, std::shared_ptr<P2Shape> shape = nullptr);
+		P2Fixture(const glm::float32_t density = 0.0f, const glm::float32_t bounciness = 0.0f, const glm::float32_t friction = 0.3f, std::shared_ptr<P2Shape> shape = nullptr);
 		virtual ~P2Fixture() = default;
 
 		P2Body* GetBody() const;

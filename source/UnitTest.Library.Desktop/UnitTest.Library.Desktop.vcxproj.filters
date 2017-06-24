@@ -10,7 +10,6 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Files\Test.json">
       <Filter>Files</Filter>
     </None>

@@ -7,6 +7,10 @@
 // Standard libraries
 #include <vector>
 #include <cstdint>
+#include <memory>
+
+// glm
+//#include "glm.hpp"
 
 //// C RunTime Header Files
 //#include <stdlib.h>

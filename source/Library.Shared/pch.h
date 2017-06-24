@@ -13,8 +13,8 @@
 #include <fstream>
 
 // glm
-#include "glm/glm.hpp"
-#include "glm/gtc/constants.hpp"
+#include "glm.hpp"
+#include "gtc/constants.hpp"
 
 
 //// C RunTime Header Files

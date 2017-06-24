@@ -8,7 +8,7 @@ using namespace glm;
 namespace Physia2D
 {
 	/*******************************************************/
-	P2Fixture::P2Fixture(const float density, const float bounciness, const float friction, std::shared_ptr<P2Shape> shape) :
+	P2Fixture::P2Fixture(const float32_t density, const float32_t bounciness, const float32_t friction, shared_ptr<P2Shape> shape) :
 		mBody(nullptr), mShape(shape), mDensity(density), mBounciness(bounciness), mFriction(friction)
 	{
 	}
@@ -30,43 +30,43 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	std::shared_ptr<P2Shape> P2Fixture::GetShape() const
+	shared_ptr<P2Shape> P2Fixture::GetShape() const
 	{
 		return mShape;
 	}
 
 	/*******************************************************/
-	glm::float32_t P2Fixture::GetDensity() const
+	float32_t P2Fixture::GetDensity() const
 	{
 		return mDensity;
 	}
 
 	/*******************************************************/
-	void P2Fixture::SetDensity(const glm::float32_t density)
+	void P2Fixture::SetDensity(const float32_t density)
 	{
 		mDensity = density;
 	}
 
 	/*******************************************************/
-	glm::float32_t P2Fixture::GetBounciness() const
+	float32_t P2Fixture::GetBounciness() const
 	{
 		return mBounciness;
 	}
 
 	/*******************************************************/
-	void P2Fixture::SetBounciness(const glm::float32_t bounciness)
+	void P2Fixture::SetBounciness(const float32_t bounciness)
 	{
 		mBounciness = bounciness;
 	}
 
 	/*******************************************************/
-	glm::float32_t P2Fixture::GetFriction() const
+	float32_t P2Fixture::GetFriction() const
 	{
 		return mFriction;
 	}
 
 	/*******************************************************/
-	void P2Fixture::SetFriction(const glm::float32_t friction)
+	void P2Fixture::SetFriction(const float32_t friction)
 	{
 		mFriction = friction;
 	}
