@@ -4,7 +4,27 @@
 
 namespace Physia2D
 {
-	/** Structure representing a transform of an object in the world.
+	/** Structure representing the rotation of a body.
+	*/
+	struct P2Rotation
+	{
+		P2Rotation(const glm::float32_t rotation = 0);
+
+		void operator=(const glm::float32_t rotation);
+
+		glm::float32_t GetRotation() const;
+		void SetRotation(const glm::float32_t rotation);
+
+		glm::float32_t Cos() const;
+		glm::float32_t Sin() const;
+
+	private:
+
+		glm::float32_t mRotation; // in radians
+		glm::float32_t mCos, mSin;
+	};
+
+	/** Structure representing a transform of a body in the world.
 	*/
 	struct P2Transform
 	{
@@ -14,7 +34,7 @@ namespace Physia2D
 		}
 
 		glm::vec2 Position;
-		glm::float32_t Rotation; // in radians
+		P2Rotation Rotation;
 	};
 
 	/** Singleton math helper that encapsulates some math helper methods.
@@ -30,17 +50,26 @@ namespace Physia2D
 
 		static MathHelper& GetInstance();
 
-		glm::vec2 Vec2CrossProduct(glm::vec2 v1, glm::vec2 v2) const;
-		glm::float32_t LengthSquared(glm::vec2 vec) const;
+		glm::vec2 RotateAndTranslateVertex(const glm::vec2& vec, const P2Transform& transform) const;
 
+		glm::vec2 LeftHandNormal(glm::vec2 v1, glm::vec2 v2) const;
+		glm::vec2 LeftHandNormal(glm::vec2 v) const;
+		glm::vec2 RightHandNormal(glm::vec2 v1, glm::vec2 v2) const;
+		glm::vec2 RightHandNormal(glm::vec2 v) const;
+
+		glm::float32_t LengthSquared(glm::vec2 vec) const;
 		glm::float32_t MaxFloat() const;
+
+		glm::float32_t FromRadiansToDegrees(const glm::float32_t radians) const;
+		glm::float32_t FromDegreesToRadians(const glm::float32_t degrees) const;
 
 	private:
 
-		MathHelper() = default;
+		MathHelper();
 		~MathHelper() = default;
+
+		glm::float32_t mDegToRadMultiplier;
+		glm::float32_t mRadToDegMultiplier;
 	};
 
-	// todo add rotation struct that has cos and sin, better than having the angle
-	
 }

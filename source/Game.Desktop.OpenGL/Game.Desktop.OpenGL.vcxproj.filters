@@ -9,4 +9,17 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="WorldRenderer.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Files">
+      <UniqueIdentifier>{460926db-bb1b-47e6-925b-027d86e3a794}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Files\Test.json">
+      <Filter>Files</Filter>
+    </None>
+    <None Include="Files\Test2.json">
+      <Filter>Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

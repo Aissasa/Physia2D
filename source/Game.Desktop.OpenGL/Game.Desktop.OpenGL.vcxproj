@@ -37,6 +37,10 @@
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="WorldRenderer.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Files\Test.json" />
+    <None Include="Files\Test2.json" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1C5AE45B-AD61-4DAF-B0EC-14FBE313CC93}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

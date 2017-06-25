@@ -3,7 +3,7 @@
 		"x": 500,
 		"y": 250
 	},
-	"Rotation": 0.2,
+	"Rotation": 0,
 	"LinearVel": {
 		"x": 2,
 		"y": 8
@@ -20,7 +20,7 @@
 				"x": 0,
 				"y": 0
 			},
-			"Radius": 60
+			"Radius": 50
 		}
 	}
 }

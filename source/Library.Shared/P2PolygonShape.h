@@ -24,6 +24,9 @@ namespace Physia2D
 		bool SetAsBox(glm::vec2 lower, glm::vec2 upper); // todo think about the angle of the box
 
 		const std::vector<glm::vec2>& GetVertices() const;
+		std::vector<glm::vec2> GetVertices();
+		std::vector<glm::vec2> GetRotatedAndTranslatedVertices(const P2Transform& transform) const;
+
 		glm::uint32_t VerticesCount() const;
 
 		static const glm::float32_t PolygonEdgeWidth;

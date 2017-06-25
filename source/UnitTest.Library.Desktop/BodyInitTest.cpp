@@ -40,7 +40,7 @@ namespace UnitTestLibraryDesktop
 
 #pragma region Test methods
 
-		/*******************************************************/
+		/**********************************************************************************************/
 		TEST_METHOD(InitWithoutJson)
 		{
 			vec2 gravity(0, -9.8f);
@@ -59,7 +59,7 @@ namespace UnitTestLibraryDesktop
 			Assert::IsTrue(body->GetFixture() == nullptr);
 			Assert::IsTrue(body->GetWorld() == &world);
 			Assert::IsTrue(bodyConfig.Position == body->GetTransform().Position);
-			Assert::AreEqual(bodyConfig.Rotation, body->GetTransform().Rotation);
+			Assert::AreEqual(bodyConfig.Rotation, body->GetTransform().Rotation.GetRotation());
 			Assert::IsTrue(bodyConfig.LinearVelocity == body->GetLinearVelocity());
 			Assert::AreEqual(bodyConfig.AngularVelocity, body->GetAngularVelocity());
 			Assert::AreEqual(bodyConfig.GravityScale, body->GetGravityScale());
@@ -81,7 +81,7 @@ namespace UnitTestLibraryDesktop
 			Assert::IsTrue(body->GetFixture()->GetShape()->GetType() == P2Shape::EType::Circle);
 		}
 
-		/*******************************************************/
+		/**********************************************************************************************/
 		TEST_METHOD(InitWithJson)
 		{
 			vec2 gravity(0, -9.8f);
@@ -115,7 +115,7 @@ namespace UnitTestLibraryDesktop
 			Assert::IsTrue(body->GetFixture() == nullptr);
 			Assert::IsTrue(body->GetWorld() == &world);
 			Assert::IsTrue(bodyConfig.Position == body->GetTransform().Position);
-			Assert::AreEqual(bodyConfig.Rotation, body->GetTransform().Rotation);
+			Assert::AreEqual(bodyConfig.Rotation, body->GetTransform().Rotation.GetRotation());
 			Assert::IsTrue(bodyConfig.LinearVelocity == body->GetLinearVelocity());
 			Assert::AreEqual(bodyConfig.AngularVelocity, body->GetAngularVelocity());
 			Assert::AreEqual(bodyConfig.GravityScale, body->GetGravityScale());
@@ -145,7 +145,7 @@ namespace UnitTestLibraryDesktop
 			Assert::IsTrue(body->GetFixture()->GetShape()->GetType() == P2Shape::EType::Circle);
 		}
 
-		/*******************************************************/
+		/**********************************************************************************************/
 		TEST_METHOD(InitWithJsonParserCircleShape)
 		{
 			JsonParser& parser = JsonParser::GetInstance();
@@ -153,7 +153,7 @@ namespace UnitTestLibraryDesktop
 
 			Assert::IsTrue(body->GetWorld() == nullptr);
 			Assert::IsTrue(vec2(0, 0.8f) == body->GetTransform().Position);
-			Assert::AreEqual(0.2f, body->GetTransform().Rotation);
+			Assert::AreEqual(0.2f, body->GetTransform().Rotation.GetRotation());
 			Assert::IsTrue(vec2(2, 8) == body->GetLinearVelocity());
 			Assert::AreEqual(0.5f, body->GetAngularVelocity());
 			Assert::AreEqual(1.0f, body->GetGravityScale());
@@ -169,7 +169,7 @@ namespace UnitTestLibraryDesktop
 			Assert::IsTrue(vec2(0.2f, 0.3f) == shape->GetCenterPosition());
 		}
 
-		/*******************************************************/
+		/**********************************************************************************************/
 		TEST_METHOD(InitWithJsonParserPolygonShape)
 		{
 			JsonParser& parser = JsonParser::GetInstance();
@@ -177,7 +177,7 @@ namespace UnitTestLibraryDesktop
 
 			Assert::IsTrue(body->GetWorld() == nullptr);
 			Assert::IsTrue(vec2(0, 0.8f) == body->GetTransform().Position);
-			Assert::AreEqual(0.2f, body->GetTransform().Rotation);
+			Assert::AreEqual(0.2f, body->GetTransform().Rotation.GetRotation());
 			Assert::IsTrue(vec2(2, 8) == body->GetLinearVelocity());
 			Assert::AreEqual(0.5f, body->GetAngularVelocity());
 			Assert::AreEqual(1.0f, body->GetGravityScale());

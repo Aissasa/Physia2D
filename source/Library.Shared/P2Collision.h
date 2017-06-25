@@ -20,5 +20,23 @@ namespace Physia2D
 		static bool CirclePolygonCollision(const P2CircleShape& circle, const P2Transform& circleTrans,
 										   const P2PolygonShape& polygon, const P2Transform& polygonTrans);
 
+	private:
+
+		struct ProjectionInterval
+		{
+			ProjectionInterval(const glm::float32 min = MathHelper::GetInstance().MaxFloat(), const glm::float32 max = MathHelper::GetInstance().MaxFloat())
+				: Min(min),
+				  Max(max)
+			{
+			}
+
+			glm::float32 Min;
+			glm::float32 Max;
+
+			glm::float32_t IntervalDistance(const ProjectionInterval& otherInterval) const;
+		};
+
+		static ProjectionInterval ProjectPolygonOnAxis(const std::vector<glm::vec2> vertices, const glm::vec2& axis);
+
 	};
 }

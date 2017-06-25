@@ -92,6 +92,24 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
+	vector<vec2> P2PolygonShape::GetVertices()
+	{
+		return mVertices;
+	}
+
+	/*******************************************************/
+	vector<vec2> P2PolygonShape::GetRotatedAndTranslatedVertices(const P2Transform& transform) const
+	{
+		vector<vec2> resultVertices;
+		for (auto& vertex : mVertices)
+		{
+			resultVertices.push_back(MathHelper::GetInstance().RotateAndTranslateVertex(vertex, transform));
+		}
+
+		return resultVertices;
+	}
+
+	/*******************************************************/
 	uint32_t P2PolygonShape::VerticesCount() const
 	{
 		return mVertices.size();

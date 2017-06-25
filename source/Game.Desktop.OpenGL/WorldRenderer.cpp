@@ -14,6 +14,7 @@
 using namespace std;
 using namespace Physia2D;
 using namespace sf;
+using namespace glm;
 
 namespace Testbed
 {
@@ -80,7 +81,7 @@ namespace Testbed
 	{
 		CircleShape circle;
 		circle.setPosition(bodyTransform.Position.x, bodyTransform.Position.y);
-		circle.setRotation(bodyTransform.Rotation);
+		circle.setRotation(MathHelper::GetInstance().FromRadiansToDegrees(bodyTransform.Rotation.GetRotation()));
 		circle.setOrigin(circleShape.GetCenterPosition().x, circleShape.GetCenterPosition().y);
 		circle.setRadius(circleShape.GetRadius());
 
@@ -104,14 +105,14 @@ namespace Testbed
 	{
 		ConvexShape polygon;
 		polygon.setPosition(bodyTransform.Position.x, bodyTransform.Position.y);
-		polygon.setRotation(bodyTransform.Rotation);
+		//polygon.setRotation(MathHelper::GetInstance().FromRadiansToDegrees(bodyTransform.Rotation.GetRotation()));
 		polygon.setPointCount(polygonShape.VerticesCount());
-		auto& vertices = polygonShape.GetVertices();
+		//auto& vertices = polygonShape.GetVertices();
+		auto vertices = polygonShape.GetRotatedAndTranslatedVertices(bodyTransform);
 		for (uint32_t i = 0; i < polygonShape.VerticesCount(); i++)
 		{
 			polygon.setPoint(i, Vector2f(vertices[i].x, vertices[i].y));
 		}
-
 
 		if (hollowShape)
 		{
