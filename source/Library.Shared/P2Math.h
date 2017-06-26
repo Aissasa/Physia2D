@@ -51,6 +51,7 @@ namespace Physia2D
 		static MathHelper& GetInstance();
 
 		glm::vec2 RotateAndTranslateVertex(const glm::vec2& vec, const P2Transform& transform) const;
+		glm::vec2 RotateVertex(const glm::vec2& vec, const P2Rotation& rotation) const;
 
 		glm::vec2 LeftHandNormal(glm::vec2 v1, glm::vec2 v2) const;
 		glm::vec2 LeftHandNormal(glm::vec2 v) const;
@@ -59,6 +60,9 @@ namespace Physia2D
 
 		glm::float32_t LengthSquared(glm::vec2 vec) const;
 		glm::float32_t MaxFloat() const;
+
+		glm::int32_t RangedRandomInt(const glm::int32_t max = RAND_MAX, const glm::int32_t min = 0) const;
+		glm::uint8_t RangedRandomUByte(const glm::uint8_t max = UINT8_MAX, const glm::uint8_t min = 0) const;
 
 		glm::float32_t FromRadiansToDegrees(const glm::float32_t radians) const;
 		glm::float32_t FromDegreesToRadians(const glm::float32_t degrees) const;

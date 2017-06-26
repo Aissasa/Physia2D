@@ -2,6 +2,7 @@
 #include "P2Collision.h"
 #include "P2CircleShape.h"
 #include "P2PolygonShape.h"
+#include "P2Body.h"
 
 using namespace std;
 using namespace glm;
@@ -9,10 +10,67 @@ using namespace glm;
 namespace Physia2D
 {
 	/***********************************************************************************************/
+	bool P2Collision::CheckCollision(const P2Body& body1, const P2Body& body2)
+	{
+		if (body1.GetFixture() == nullptr || body1.GetFixture()->GetShape() == nullptr ||
+			body2.GetFixture() == nullptr || body2.GetFixture()->GetShape() == nullptr)
+		{
+			return false;
+		}
+
+		switch (body1.GetFixture()->GetShape()->GetType())
+		{
+			case P2Shape::EType::Circle:
+			{
+				switch (body2.GetFixture()->GetShape()->GetType())
+				{
+					case P2Shape::EType::Circle:
+					{
+						return CircleCircleCollision(*body1.GetFixture()->GetShape()->As<P2CircleShape>(), body1.GetTransform(),
+													 *body2.GetFixture()->GetShape()->As<P2CircleShape>(), body2.GetTransform());
+						break;
+					}
+					case P2Shape::EType::Polygon:
+					{
+						return CirclePolygonCollision(*body1.GetFixture()->GetShape()->As<P2CircleShape>(), body1.GetTransform(),
+													  *body2.GetFixture()->GetShape()->As<P2PolygonShape>(), body2.GetTransform());
+						break;
+					}
+					default:;
+				}
+				break;
+			}
+			case P2Shape::EType::Polygon:
+			{
+				switch (body2.GetFixture()->GetShape()->GetType())
+				{
+					case P2Shape::EType::Circle:
+					{
+						return CirclePolygonCollision(*body2.GetFixture()->GetShape()->As<P2CircleShape>(), body2.GetTransform(),
+													  *body1.GetFixture()->GetShape()->As<P2PolygonShape>(), body1.GetTransform());
+						break;
+					}
+					case P2Shape::EType::Polygon:
+					{
+						return PolygonPolygonCollision(*body2.GetFixture()->GetShape()->As<P2PolygonShape>(), body2.GetTransform(),
+													   *body1.GetFixture()->GetShape()->As<P2PolygonShape>(), body1.GetTransform());
+						break;
+					}
+					default:;
+				}
+				break;
+			}
+			default:;
+		}
+
+		return false;
+	}
+
+	/***********************************************************************************************/
 	bool P2Collision::CircleCircleCollision(const P2CircleShape& circle1, const P2Transform& trans1,
 											const P2CircleShape& circle2, const P2Transform& trans2)
 	{
-		// rotate the shapes
+		// rotate and translate the shapes
 		vec2 center1 = MathHelper::GetInstance().RotateAndTranslateVertex(circle1.GetCenterPosition(), trans1);
 		vec2 center2 = MathHelper::GetInstance().RotateAndTranslateVertex(circle2.GetCenterPosition(), trans2);
 
@@ -26,7 +84,7 @@ namespace Physia2D
 	bool P2Collision::PolygonPolygonCollision(const P2PolygonShape& polygon1, const P2Transform& trans1,
 											  const P2PolygonShape& polygon2, const P2Transform& trans2)
 	{
-		// rotate the shapes
+		// rotate and translate the shapes
 		vector<vec2> vertices1 = polygon1.GetRotatedAndTranslatedVertices(trans1);
 		vector<vec2> vertices2 = polygon2.GetRotatedAndTranslatedVertices(trans2);
 
@@ -52,7 +110,7 @@ namespace Physia2D
 			// Find the axis perpendicular to the current edge
 			// We go right because the polygons are CCW
 			vec2 axis = MathHelper::GetInstance().RightHandNormal(edge);
-			axis = normalize(axis);;
+			axis = normalize(axis);
 
 			// Find the projection of the polygons on the current axis
 			auto interval1 = ProjectPolygonOnAxis(vertices1, axis);
@@ -61,18 +119,18 @@ namespace Physia2D
 			// Check if the polygon projections are currentlty intersecting
 			if (interval1.IntervalDistance(interval2) > 0)
 			{
-				return true;;
+				return false;
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	/***********************************************************************************************/
 	bool P2Collision::CirclePolygonCollision(const P2CircleShape& circle, const P2Transform& circleTrans,
 											 const P2PolygonShape& polygon, const P2Transform& polygonTrans)
 	{
-		// rotate the shapes
+		// rotate and translate the shapes
 		vec2 circleCenter = MathHelper::GetInstance().RotateAndTranslateVertex(circle.GetCenterPosition(), circleTrans);
 		vector<vec2> polygonVertices = polygon.GetRotatedAndTranslatedVertices(polygonTrans);
 
@@ -101,11 +159,12 @@ namespace Physia2D
 			}
 		}
 
-		vertex = polygonVertices[nearestVertex - 1];
+		int32_t previousIndex = (nearestVertex + polygonVertices.size() - 1) % polygonVertices.size();
+		vertex = polygonVertices[previousIndex];
 
 		for (uint32_t i = 0; i < 2; i++)
 		{
-			vec2 nextVertex = polygonVertices[nearestVertex + i];
+			vec2 nextVertex = polygonVertices[(nearestVertex + i) % polygonVertices.size()];
 			vec2 edge = nextVertex - vertex;
 			float32_t edgeLengthSquared = MathHelper::GetInstance().LengthSquared(edge);
 
@@ -164,7 +223,7 @@ namespace Physia2D
 			vertex = nextVertex;
 		}
 
-		return true;
+		return false;
 	}
 
 	/***********************************************************************************************/
@@ -190,12 +249,9 @@ namespace Physia2D
 			{
 				interval.Min = dotProduct;
 			}
-			else
+			if (dotProduct > interval.Max)
 			{
-				if (dotProduct > interval.Max)
-				{
-					interval.Max = dotProduct;
-				}
+				interval.Max = dotProduct;
 			}
 		}
 

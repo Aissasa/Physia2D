@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
+#include <ctime>
 
 // glm
 #include "glm.hpp"

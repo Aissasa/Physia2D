@@ -9,6 +9,7 @@
 #include "P2CircleShape.h"
 #include "P2PolygonShape.h"
 #include "JsonParser.h"
+#include "P2Collision.h"
 
 
 using namespace std;
@@ -40,14 +41,16 @@ namespace Testbed
 	void WorldRenderer::RenderWorld(RenderWindow& window, const P2World& world, bool hollowShapes) const
 	{
 		auto& bodies = world.GetBodies();
-		for (auto& body : bodies)
+
+		for (uint32_t i = 0; i < bodies.size(); ++i)
 		{
-			RenderBody(window, *body, hollowShapes);
+			bool colliding = CheckCollision(bodies, i);
+			RenderBody(window, *bodies[i], colliding, hollowShapes);
 		}
 	}
 
 	/**********************************************************************************************/
-	void WorldRenderer::RenderBody(RenderWindow& window, const P2Body& body, bool hollowShapes) const
+	void WorldRenderer::RenderBody(RenderWindow& window, const P2Body& body, bool colliding, bool hollowShapes) const
 	{
 		auto fixture = body.GetFixture();
 		if (fixture != nullptr)
@@ -59,13 +62,13 @@ namespace Testbed
 				{
 					case P2Shape::EType::Circle:
 					{
-						DrawCircle(window, *shape->As<P2CircleShape>(), body.GetTransform(), hollowShapes);
+						DrawCircle(window, *shape->As<P2CircleShape>(), body.GetTransform(), colliding, hollowShapes);
 						break;
 					}
 
 					case P2Shape::EType::Polygon:
 					{
-						DrawPolygon(window, *shape->As<P2PolygonShape>(), body.GetTransform(), hollowShapes);
+						DrawPolygon(window, *shape->As<P2PolygonShape>(), body.GetTransform(), colliding, hollowShapes);
 						break;
 					}
 
@@ -77,23 +80,25 @@ namespace Testbed
 
 	/**********************************************************************************************/
 	void WorldRenderer::DrawCircle(RenderWindow& window, const P2CircleShape& circleShape,
-								   const P2Transform& bodyTransform, bool hollowShape) const
+								   const P2Transform& bodyTransform, bool colliding, bool hollowShape) const
 	{
 		CircleShape circle;
 		circle.setPosition(bodyTransform.Position.x, bodyTransform.Position.y);
 		circle.setRotation(MathHelper::GetInstance().FromRadiansToDegrees(bodyTransform.Rotation.GetRotation()));
-		circle.setOrigin(circleShape.GetCenterPosition().x, circleShape.GetCenterPosition().y);
+		circle.setOrigin(circleShape.GetCenterPosition().x + circleShape.GetRadius(), circleShape.GetCenterPosition().y + circleShape.GetRadius());
 		circle.setRadius(circleShape.GetRadius());
+
+		Color colorToUse = colliding ? mCircleCollisionColor : mCircleColor;
 
 		if (hollowShape)
 		{
 			circle.setFillColor(Color::Black);
-			circle.setOutlineColor(mCircleColor);
+			circle.setOutlineColor(colorToUse);
 			circle.setOutlineThickness(OUTLINE_THICKNESS);
 		}
 		else
 		{
-			circle.setFillColor(mCircleColor);
+			circle.setFillColor(colorToUse);
 		}
 
 		window.draw(circle);
@@ -101,30 +106,55 @@ namespace Testbed
 
 	/**********************************************************************************************/
 	void WorldRenderer::DrawPolygon(RenderWindow& window, const P2PolygonShape& polygonShape,
-									const P2Transform& bodyTransform, bool hollowShape) const
+									const P2Transform& bodyTransform, bool colliding, bool hollowShape) const
 	{
 		ConvexShape polygon;
-		polygon.setPosition(bodyTransform.Position.x, bodyTransform.Position.y);
-		//polygon.setRotation(MathHelper::GetInstance().FromRadiansToDegrees(bodyTransform.Rotation.GetRotation()));
 		polygon.setPointCount(polygonShape.VerticesCount());
-		//auto& vertices = polygonShape.GetVertices();
-		auto vertices = polygonShape.GetRotatedAndTranslatedVertices(bodyTransform);
+
+		polygon.setPosition(bodyTransform.Position.x, bodyTransform.Position.y);
+		polygon.setRotation(MathHelper::GetInstance().FromRadiansToDegrees(bodyTransform.Rotation.GetRotation()));
+		auto& vertices = polygonShape.GetVertices();
+		//auto vertices = polygonShape.GetRotatedAndTranslatedVertices(bodyTransform);
 		for (uint32_t i = 0; i < polygonShape.VerticesCount(); i++)
 		{
 			polygon.setPoint(i, Vector2f(vertices[i].x, vertices[i].y));
 		}
 
+		Color colorToUse = colliding ? mPolygonCollisionColor : mPolygonColor;
+
 		if (hollowShape)
 		{
 			polygon.setFillColor(Color::Black);
-			polygon.setOutlineColor(mPolygonColor);
+			polygon.setOutlineColor(colorToUse);
 			polygon.setOutlineThickness(OUTLINE_THICKNESS);
 		}
 		else
 		{
-			polygon.setFillColor(mPolygonColor);
+			polygon.setFillColor(colorToUse);
 		}
 
 		window.draw(polygon);
+	}
+
+	/**********************************************************************************************/
+	bool WorldRenderer::CheckCollision(const vector<shared_ptr<P2Body>>& bodies, const uint32_t bodyIndex) const
+	{
+		assert(bodyIndex >= 0 && bodyIndex < bodies.size());
+		auto body = bodies[bodyIndex];
+
+		for (uint32_t i = 0; i < bodies.size(); ++i)
+		{
+			if (i == bodyIndex)
+			{
+				continue;
+			}
+
+			if (P2Collision::CheckCollision(*body, *bodies[i]))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

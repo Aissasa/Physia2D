@@ -77,6 +77,20 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
+	vec2 MathHelper::RotateVertex(const vec2& vec, const P2Rotation& rotation) const
+	{
+		vec2 resultVec;
+
+		// Rotation
+		// x' = x cos θ − y sin θ : rotate along x
+		// y' = x sin θ + y cos θ : rotate along y
+		resultVec.x = (vec.x * rotation.Cos() - vec.y * rotation.Sin());
+		resultVec.y = (vec.x * rotation.Sin() + vec.y * rotation.Cos());
+
+		return resultVec;
+	}
+
+	/*******************************************************/
 	vec2 MathHelper::LeftHandNormal(vec2 v1, vec2 v2) const
 	{
 		vec2 temp = v2 - v1;
@@ -115,6 +129,18 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
+	int32_t MathHelper::RangedRandomInt(const int32_t max, const int32_t min) const
+	{
+		return rand() % (max - min + 1) - min;
+	}
+
+	/*******************************************************/
+	uint8_t MathHelper::RangedRandomUByte(const uint8_t max, const uint8_t min) const
+	{
+		return static_cast<uint8_t>(rand() % (max - min + 1) - min);
+	}
+
+	/*******************************************************/
 	float32_t MathHelper::FromRadiansToDegrees(const float32_t radians) const
 	{
 		return radians * mRadToDegMultiplier;
@@ -127,10 +153,11 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	MathHelper::MathHelper() : 
-		mDegToRadMultiplier(pi<float32_t>() / 180.0f), 
+	MathHelper::MathHelper() :
+		mDegToRadMultiplier(pi<float32_t>() / 180.0f),
 		mRadToDegMultiplier(180.0f / pi<float32_t>())
 	{
+		srand(static_cast<uint32_t>(time(nullptr))); // use current time as seed for random generator
 	}
 
 #pragma endregion

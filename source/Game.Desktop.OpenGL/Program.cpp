@@ -23,8 +23,8 @@ shared_ptr<P2World> InitWorld()
 	// setup the world
 	shared_ptr<P2World> world = make_shared<P2World>();
 	JsonParser& parser = JsonParser::GetInstance();
-	auto body1 = parser.ParseBody("Files/Test.json");
-	auto body2 = parser.ParseBody("Files/Test2.json");
+	auto body1 = parser.ParseBody("Files/Polygon2.json");
+	auto body2 = parser.ParseBody("Files/Circle1.json");
 	world->AddBody(body1);
 	world->AddBody(body2);
 
@@ -54,6 +54,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// create the window
 	RenderWindow window(VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), WINDOW_NAME, Style::Default, settings);
+
+	View view = window.getDefaultView();
+	view.setSize(SCREEN_WIDTH, -SCREEN_HEIGHT);
+	window.setView(view);
 
 	// run the program as long as the window is open
 	while (window.isOpen())

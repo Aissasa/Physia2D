@@ -1,0 +1,26 @@
+{
+	"Position": {
+		"x": 290,
+		"y": 175
+	},
+	"Rotation": 2,
+	"LinearVel": {
+		"x": 2,
+		"y": 8
+	},
+	"AngularVel": 0.5,
+	"GravityScale": 1,
+	"Fixture": {
+		"Density": 0.9,
+		"Bounciness": 0.2,
+		"Friction": 1,
+		"Shape": {
+			"Type": 1,
+			"Position": {
+				"x": 0,
+				"y": 0
+			},
+			"Radius": 50
+		}
+	}
+}

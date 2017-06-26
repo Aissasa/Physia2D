@@ -15,10 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Files\Test.json">
+    <None Include="Files\Circle2.json">
       <Filter>Files</Filter>
     </None>
-    <None Include="Files\Test2.json">
+    <None Include="Files\Polygon1.json">
+      <Filter>Files</Filter>
+    </None>
+    <None Include="Files\Polygon2.json">
+      <Filter>Files</Filter>
+    </None>
+    <None Include="Files\Circle1.json">
       <Filter>Files</Filter>
     </None>
   </ItemGroup>

@@ -4,12 +4,15 @@
 
 namespace Physia2D
 {
+	class P2Body;
 	class P2CircleShape;
 	class P2PolygonShape;
 
 	class P2Collision
 	{
 	public:
+
+		static bool CheckCollision(const P2Body& body1, const P2Body& body2);
 
 		static bool CircleCircleCollision(const P2CircleShape& circle1, const P2Transform& trans1,
 										  const P2CircleShape& circle2, const P2Transform& trans2);
@@ -24,7 +27,7 @@ namespace Physia2D
 
 		struct ProjectionInterval
 		{
-			ProjectionInterval(const glm::float32 min = MathHelper::GetInstance().MaxFloat(), const glm::float32 max = MathHelper::GetInstance().MaxFloat())
+			ProjectionInterval(const glm::float32 min = MathHelper::GetInstance().MaxFloat(), const glm::float32 max = -MathHelper::GetInstance().MaxFloat())
 				: Min(min),
 				  Max(max)
 			{
