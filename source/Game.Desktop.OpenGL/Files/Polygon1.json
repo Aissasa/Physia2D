@@ -3,12 +3,12 @@
 		"x": 220,
 		"y": 170
 	},
-	"Rotation": 4,
+	"Rotation": 0,
 	"LinearVel": {
-		"x": 2,
-		"y": 8
+		"x": 30,
+		"y": 40
 	},
-	"AngularVel": 0.5,
+	"AngularVel": 1,
 	"GravityScale": 1,
 	"Fixture": {
 		"Density": 0.9,

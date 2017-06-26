@@ -37,6 +37,13 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
+	void P2Body::Update(const float32_t elapsedTime)
+	{
+		mTransform.Position += mLinearVelocity * elapsedTime;
+		mTransform.Rotation = mTransform.Rotation.GetRotation() + mAngularVelocity * elapsedTime;
+	}
+
+	/*******************************************************/
 	void P2Body::ResetMassData()
 	{
 		if (mFixture && mFixture->GetShape())

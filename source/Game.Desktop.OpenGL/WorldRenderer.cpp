@@ -92,7 +92,7 @@ namespace Testbed
 
 		if (hollowShape)
 		{
-			circle.setFillColor(Color::Black);
+			circle.setFillColor(Color(0, 0, 0, 0));
 			circle.setOutlineColor(colorToUse);
 			circle.setOutlineThickness(OUTLINE_THICKNESS);
 		}
@@ -124,7 +124,7 @@ namespace Testbed
 
 		if (hollowShape)
 		{
-			polygon.setFillColor(Color::Black);
+			polygon.setFillColor(Color(0, 0, 0, 0));
 			polygon.setOutlineColor(colorToUse);
 			polygon.setOutlineThickness(OUTLINE_THICKNESS);
 		}

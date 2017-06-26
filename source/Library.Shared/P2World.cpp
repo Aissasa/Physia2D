@@ -52,6 +52,16 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
+	void P2World::Update(float32_t elapsedTime)
+	{
+		assert(elapsedTime > 0);
+		for (auto& body : mBodies)
+		{
+			body->Update(elapsedTime);
+		}
+	}
+
+	/*******************************************************/
 	const vector<shared_ptr<P2Body>>& P2World::GetBodies() const
 	{
 		return mBodies;

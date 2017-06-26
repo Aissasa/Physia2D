@@ -15,6 +15,8 @@ namespace Physia2D
 		bool AddBody(const std::shared_ptr<P2Body>& body);
 		bool DeleteBody(const std::shared_ptr<P2Body>& body);
 
+		void Update(const glm::float32_t elapsedTime);
+
 		const std::vector<std::shared_ptr<P2Body>>& GetBodies() const;
 
 		glm::vec2 GetGravity() const;

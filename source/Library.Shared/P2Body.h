@@ -36,6 +36,8 @@ namespace Physia2D
 
 		std::shared_ptr<P2Fixture> CreateFixture(const P2FixtureConfig& fixtureConfig, bool replaceIfExists = true);
 
+		void Update(const glm::float32_t elapsedTime);
+
 		// in case the mass data of the shape changed
 		void ResetMassData();
 

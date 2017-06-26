@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Stopwatch.h" />
     <ClInclude Include="WorldRenderer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -35,13 +36,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Stopwatch.cpp" />
     <ClCompile Include="WorldRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Files\Circle1.json" />
+    <None Include="Files\CircleVS.json" />
     <None Include="Files\Circle2.json" />
     <None Include="Files\Polygon1.json" />
     <None Include="Files\Polygon2.json" />
+    <None Include="Files\PolygonVS.json" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1C5AE45B-AD61-4DAF-B0EC-14FBE313CC93}</ProjectGuid>

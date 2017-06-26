@@ -7,6 +7,7 @@
 // Standard libraries
 #include <vector>
 #include <cstdint>
+#include <iostream>
 #include <memory>
 
 // glm

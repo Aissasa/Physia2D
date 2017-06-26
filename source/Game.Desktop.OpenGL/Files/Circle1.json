@@ -1,12 +1,12 @@
 {
 	"Position": {
-		"x": 290,
-		"y": 175
+		"x": 200,
+		"y": 525
 	},
-	"Rotation": 2,
+	"Rotation": 0,
 	"LinearVel": {
-		"x": 2,
-		"y": 8
+		"x": 60,
+		"y": 0
 	},
 	"AngularVel": 0.5,
 	"GravityScale": 1,

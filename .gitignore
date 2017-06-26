@@ -1,4 +1,5 @@
 build/ipch/
+build/.vs/
 *.db
 source/Game.Desktop.OpenGL/obj/
 source/Library.Desktop/obj/
@@ -7,3 +8,5 @@ source/UnitTest.Library.Desktop/bin/
 *.tlog
 build/packages/
 *.opendb
+source/Game.Desktop.OpenGL/bin/
+source/Library.Desktop/My\ Amplifier\ Results\ -\ Library.Desktop/
