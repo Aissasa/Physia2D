@@ -30,11 +30,11 @@ namespace Physia2D
 	/*******************************************************/
 	P2AABB P2CircleShape::ComputeAABB(const P2Transform& transform) const
 	{
-		UNREFERENCED_PARAMETER(transform); // todo multiply verts by this to get true position in world
+		vec2 center = MathHelper::GetInstance().RotateAndTranslateVertex(mCenterPosition, transform);
 
 		P2AABB aabb;
-		aabb.LowerVert = mCenterPosition - mRadius;
-		aabb.UpperVert = mCenterPosition + mRadius;
+		aabb.LowerVert = center - mRadius;
+		aabb.UpperVert = center + mRadius;
 
 		return aabb;
 	}

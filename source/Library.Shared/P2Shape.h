@@ -2,6 +2,7 @@
 
 #include "P2Math.h"
 #include "RTTI.h"
+#include "P2Collision.h"
 
 namespace Physia2D
 {
@@ -14,19 +15,6 @@ namespace Physia2D
 		glm::float32_t Inertia;
 	};
 
-	/** Struct that holds the shape bounds.
-	*/
-	struct P2AABB
-	{
-		P2AABB(const glm::vec2& lowerVert = glm::vec2(0), const glm::vec2& upperVert = glm::vec2(0))
-			: LowerVert(lowerVert), UpperVert(upperVert)
-		{
-		}
-
-		glm::vec2 LowerVert;
-		glm::vec2 UpperVert;
-	};
-
 	/** Class for a general shape.
 	*/
 	class P2Shape : public RTTI
@@ -35,7 +23,6 @@ namespace Physia2D
 
 	public:
 
-		// todo delete type since i have rtti now
 		enum class EType
 		{
 			Circle,

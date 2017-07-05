@@ -25,14 +25,14 @@ namespace Physia2D
 
 	/** Class representing a Rigidbody.
 	*/
-	class P2Body
+	class P2Body final
 	{
 	public:
 
 		// todo add body types enum : static, dynamic, kinamatic
 
 		P2Body(const P2BodyConfig& bodyConfig);
-		virtual ~P2Body();
+		~P2Body();
 
 		std::shared_ptr<P2Fixture> CreateFixture(const P2FixtureConfig& fixtureConfig, bool replaceIfExists = true);
 
@@ -68,6 +68,9 @@ namespace Physia2D
 		glm::float32_t GetInertia() const;
 		glm::float32_t GetInvInertia() const;
 
+
+		bool IsColliding() const;
+		void SetIsColliding(const bool colliding);
 	private:
 
 		friend class P2World;
@@ -88,5 +91,8 @@ namespace Physia2D
 		glm::float32_t mInvInertia;
 
 		glm::float32_t mGravityScale;
+
+		// todo for rendering purposes : remove it later
+		bool mIsColliding;
 	};
 }

@@ -33,9 +33,9 @@ namespace Testbed
 
 		static WorldRenderer& GetInstance();
 
-		void RenderWorld(sf::RenderWindow& window, const Physia2D::P2World& world, bool hollowShapes = true) const;
+		void RenderWorld(sf::RenderWindow& window, const Physia2D::P2World& world, const bool hollowShapes = true) const;
 		void RenderBody(sf::RenderWindow& window, const Physia2D::P2Body& body, 
-						bool colliding = false, bool hollowShapes = true) const;
+						const bool colliding = false, const bool hollowShapes = true) const;
 
 	private:
 
@@ -43,17 +43,15 @@ namespace Testbed
 		~WorldRenderer() = default;
 
 		void DrawCircle(sf::RenderWindow& window, const Physia2D::P2CircleShape& circleShape,
-						const Physia2D::P2Transform& bodyTransform, bool colliding = false, bool hollowShape = true) const;
+						const Physia2D::P2Transform& bodyTransform, const bool colliding = false, const bool hollowShape = true) const;
 		void DrawPolygon(sf::RenderWindow& window, const Physia2D::P2PolygonShape& polygonShape,
-						 const Physia2D::P2Transform& bodyTransform, bool colliding = false, bool hollowShape = true) const;
-
-		bool CheckCollision(const std::vector<std::shared_ptr<Physia2D::P2Body>>& bodies, const uint32_t bodyIndex) const;
+						 const Physia2D::P2Transform& bodyTransform, const bool colliding = false, const bool hollowShape = true) const;
 
 		static const float OUTLINE_THICKNESS;
 
 		sf::Color mCircleColor;
-		sf::Color mCircleCollisionColor; // todo delete
+		sf::Color mCircleCollisionColor;
 		sf::Color mPolygonColor;
-		sf::Color mPolygonCollisionColor; // todo delete
+		sf::Color mPolygonCollisionColor;
 	};
 }

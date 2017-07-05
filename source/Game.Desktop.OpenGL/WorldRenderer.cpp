@@ -38,19 +38,18 @@ namespace Testbed
 	}
 
 	/**********************************************************************************************/
-	void WorldRenderer::RenderWorld(RenderWindow& window, const P2World& world, bool hollowShapes) const
+	void WorldRenderer::RenderWorld(RenderWindow& window, const P2World& world, const bool hollowShapes) const
 	{
 		auto& bodies = world.GetBodies();
 
 		for (uint32_t i = 0; i < bodies.size(); ++i)
 		{
-			bool colliding = CheckCollision(bodies, i);
-			RenderBody(window, *bodies[i], colliding, hollowShapes);
+			RenderBody(window, *bodies[i], bodies[i]->IsColliding(), hollowShapes);
 		}
 	}
 
 	/**********************************************************************************************/
-	void WorldRenderer::RenderBody(RenderWindow& window, const P2Body& body, bool colliding, bool hollowShapes) const
+	void WorldRenderer::RenderBody(RenderWindow& window, const P2Body& body, const bool colliding, const bool hollowShapes) const
 	{
 		auto fixture = body.GetFixture();
 		if (fixture != nullptr)
@@ -80,7 +79,7 @@ namespace Testbed
 
 	/**********************************************************************************************/
 	void WorldRenderer::DrawCircle(RenderWindow& window, const P2CircleShape& circleShape,
-								   const P2Transform& bodyTransform, bool colliding, bool hollowShape) const
+								   const P2Transform& bodyTransform, const bool colliding, const bool hollowShape) const
 	{
 		CircleShape circle;
 		circle.setPosition(bodyTransform.Position.x, bodyTransform.Position.y);
@@ -106,7 +105,7 @@ namespace Testbed
 
 	/**********************************************************************************************/
 	void WorldRenderer::DrawPolygon(RenderWindow& window, const P2PolygonShape& polygonShape,
-									const P2Transform& bodyTransform, bool colliding, bool hollowShape) const
+									const P2Transform& bodyTransform, const bool colliding, const bool hollowShape) const
 	{
 		ConvexShape polygon;
 		polygon.setPointCount(polygonShape.VerticesCount());
@@ -114,7 +113,7 @@ namespace Testbed
 		polygon.setPosition(bodyTransform.Position.x, bodyTransform.Position.y);
 		polygon.setRotation(MathHelper::GetInstance().FromRadiansToDegrees(bodyTransform.Rotation.GetRotation()));
 		auto& vertices = polygonShape.GetVertices();
-		//auto vertices = polygonShape.GetRotatedAndTranslatedVertices(bodyTransform);
+
 		for (uint32_t i = 0; i < polygonShape.VerticesCount(); i++)
 		{
 			polygon.setPoint(i, Vector2f(vertices[i].x, vertices[i].y));
@@ -134,27 +133,5 @@ namespace Testbed
 		}
 
 		window.draw(polygon);
-	}
-
-	/**********************************************************************************************/
-	bool WorldRenderer::CheckCollision(const vector<shared_ptr<P2Body>>& bodies, const uint32_t bodyIndex) const
-	{
-		assert(bodyIndex >= 0 && bodyIndex < bodies.size());
-		auto body = bodies[bodyIndex];
-
-		for (uint32_t i = 0; i < bodies.size(); ++i)
-		{
-			if (i == bodyIndex)
-			{
-				continue;
-			}
-
-			if (P2Collision::CheckCollision(*body, *bodies[i]))
-			{
-				return true;
-			}
-		}
-
-		return false;
 	}
 }

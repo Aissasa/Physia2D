@@ -11,7 +11,7 @@ namespace Physia2D
 	/*******************************************************/
 	P2Body::P2Body(const P2BodyConfig& bodyConfig) :
 		mTransform(bodyConfig.Position, bodyConfig.Rotation), mLinearVelocity(bodyConfig.LinearVelocity), mAngularVelocity(bodyConfig.AngularVelocity),
-		mForce(0), mTorque(0), mWorld(nullptr), mFixture(nullptr), mMass(0), mInvMass(0), mInertia(0), mInvInertia(0), mGravityScale(bodyConfig.GravityScale)
+		mForce(0), mTorque(0), mWorld(nullptr), mFixture(nullptr), mMass(0), mInvMass(0), mInertia(0), mInvInertia(0), mGravityScale(bodyConfig.GravityScale), mIsColliding(false)
 	{
 	}
 
@@ -31,6 +31,8 @@ namespace Physia2D
 				mFixture = make_shared<P2Fixture>();
 			}
 			mFixture->Create(*this, fixtureConfig);
+
+			ResetMassData();
 		}
 
 		return mFixture;
@@ -162,5 +164,17 @@ namespace Physia2D
 	float32_t P2Body::GetInvInertia() const
 	{
 		return mInvInertia;
+	}
+
+	/*******************************************************/
+	bool P2Body::IsColliding() const
+	{
+		return mIsColliding;
+	}
+
+	/*******************************************************/
+	void P2Body::SetIsColliding(const bool colliding)
+	{
+		mIsColliding = colliding;
 	}
 }

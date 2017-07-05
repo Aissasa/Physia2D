@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)P2CircleShape.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)P2Fixture.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -17,28 +14,28 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParser.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)P2Shape.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)P2PolygonShape.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)P2Math.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2CircleShape.cpp">
+      <Filter>Core\Collision\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2PolygonShape.cpp">
+      <Filter>Core\Collision\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2Shape.cpp">
+      <Filter>Core\Collision\Shapes</Filter>
+    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)P2Collision.cpp">
-      <Filter>Core</Filter>
+      <Filter>Core\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2BroadPhase.cpp">
+      <Filter>Core\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)P2Fixture.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)P2Shape.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)P2CircleShape.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)P2Math.h">
@@ -56,11 +53,20 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)RTTI.h">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2CircleShape.h">
+      <Filter>Core\Collision\Shapes</Filter>
+    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)P2PolygonShape.h">
-      <Filter>Core</Filter>
+      <Filter>Core\Collision\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2Shape.h">
+      <Filter>Core\Collision\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)P2Collision.h">
-      <Filter>Core</Filter>
+      <Filter>Core\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2BroadPhase.h">
+      <Filter>Core\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +78,12 @@
     </Filter>
     <Filter Include="Misc">
       <UniqueIdentifier>{dd9a6e34-d452-4aa6-ac24-0a18c2730fcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Collision">
+      <UniqueIdentifier>{c55bf092-855c-4927-bfc7-52eeb64ddc87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Collision\Shapes">
+      <UniqueIdentifier>{ee35e72d-1c68-415e-9ca3-9ff2fcf83574}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

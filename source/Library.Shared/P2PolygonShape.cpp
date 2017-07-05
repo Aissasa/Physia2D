@@ -31,14 +31,14 @@ namespace Physia2D
 	/*******************************************************/
 	P2AABB P2PolygonShape::ComputeAABB(const P2Transform& transform) const
 	{
-		UNREFERENCED_PARAMETER(transform); // todo multiply verts by this to get true position in world
-
 		P2AABB aabb;
 
-		aabb.LowerVert = mVertices[0];
+		auto vertices = GetRotatedAndTranslatedVertices(transform);
+
+		aabb.LowerVert = vertices[0];
 		aabb.UpperVert = aabb.LowerVert;
 
-		for (auto& vertex : mVertices)
+		for (auto& vertex : vertices)
 		{
 			aabb.LowerVert = min(aabb.LowerVert, vertex);
 			aabb.UpperVert = max(aabb.UpperVert, vertex);

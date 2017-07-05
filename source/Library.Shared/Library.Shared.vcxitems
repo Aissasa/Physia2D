@@ -14,6 +14,7 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)P2BroadPhase.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonParser.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)P2Body.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)P2CircleShape.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)RTTI.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)P2BroadPhase.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParser.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)P2Body.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)P2CircleShape.cpp" />

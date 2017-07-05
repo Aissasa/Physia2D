@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "P2World.h"
 #include "P2Shape.h"
+#include "P2BroadPhase.h"
 
 using namespace std;
 using namespace glm;
@@ -38,13 +39,12 @@ namespace Physia2D
 	/*******************************************************/
 	bool P2World::DeleteBody(const shared_ptr<P2Body>& body)
 	{
-		vector<shared_ptr<P2Body>>::iterator it;
-		for (it = mBodies.begin(); it != mBodies.end(); ++it)
+		for (vector<shared_ptr<P2Body>>::iterator it = mBodies.begin(); it != mBodies.end(); ++it)
 		{
 			if (*it == body)
 			{
 				mBodies.erase(it);
-				return true;;
+				return true;
 			}
 		}
 
@@ -52,9 +52,13 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	void P2World::Update(float32_t elapsedTime)
+	void P2World::Update(const float32_t elapsedTime)
 	{
 		assert(elapsedTime > 0);
+
+		auto pairs = P2BroadPhase::GetInstance().GetPotentiallyCollidingPairs(mBodies);
+		P2Collision::GetInstance().ResolveCollisions(pairs);
+
 		for (auto& body : mBodies)
 		{
 			body->Update(elapsedTime);

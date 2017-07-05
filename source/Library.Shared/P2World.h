@@ -4,7 +4,7 @@
 
 namespace Physia2D
 {
-	class P2World
+	class P2World final
 	{
 	public:
 
