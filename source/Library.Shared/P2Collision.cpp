@@ -203,9 +203,6 @@ namespace Physia2D
 	bool P2Collision::CirclePolygonCollision(const P2CircleShape& circle, const P2Transform& circleTrans,
 											 const P2PolygonShape& polygon, const P2Transform& polygonTrans, Manifold& manifold)
 	{
-		// todo populate manifold
-		UNREFERENCED_PARAMETER(manifold);
-
 		// rotate and translate the shapes
 		vec2 circleCenter = MathHelper::GetInstance().RotateAndTranslateVertex(circle.GetCenterPosition(), circleTrans);
 		vector<vec2> polygonVertices = polygon.GetRotatedAndTranslatedVertices(polygonTrans);
@@ -213,25 +210,35 @@ namespace Physia2D
 		// init variables
 		vec2 vertex = polygonVertices.back();
 
-		float32_t nearestDistance = MathHelper::GetInstance().MaxFloat();
+		float32_t nearestDistanceSqr = MathHelper::GetInstance().MaxFloat();
 		int32_t nearestVertex = -1;
 
 		// detect the nearest vertex
 		for (uint32_t i = 0; i < polygon.VerticesCount(); i++)
 		{
 			vec2 axis = circleCenter - polygonVertices[i];
-			float32_t distance = MathHelper::GetInstance().LengthSquared(axis) - circle.GetRadiusSqr();
+			float32_t distanceSqr = MathHelper::GetInstance().LengthSquared(axis) - circle.GetRadiusSqr();
 
 			// collides with the vertex
-			if (distance <= 0)
+			if (distanceSqr <= 0)
 			{
+				float32_t distance = length(axis);
+				if (distance != 0)
+				{
+					manifold.Penetration = circle.GetRadius() - distance;
+					manifold.Normal = axis / distance;
+				}
+				else
+				{
+					manifold = Manifold(circle.GetRadius());
+				}
 				return true;
 			}
 
-			if (distance < nearestDistance)
+			if (distanceSqr < nearestDistanceSqr)
 			{
 				nearestVertex = i;
-				nearestDistance = distance;
+				nearestDistanceSqr = distanceSqr;
 			}
 		}
 
@@ -260,6 +267,17 @@ namespace Physia2D
 				// check edge and circle collision
 				if (MathHelper::GetInstance().LengthSquared(axis) <= circle.GetRadiusSqr())
 				{
+					vec2 normal = MathHelper::GetInstance().RightHandNormal(edge);
+					float32_t distance = length(normal);
+					if (distance != 0)
+					{
+						manifold.Penetration = circle.GetRadius() - distance;
+						manifold.Normal = normal / distance;
+					}
+					else
+					{
+						manifold = Manifold(circle.GetRadius());
+					}
 					return true;
 				}
 

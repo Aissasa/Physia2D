@@ -123,7 +123,7 @@ namespace Physia2D
 		for (uint32_t i = 0; i < mVertices.size(); ++i)
 		{
 			vec2 currentVec = mVertices[i];
-			vec2 nextVec = mVertices[i % mVertices.size()];
+			vec2 nextVec = mVertices[(i + 1) % mVertices.size()];
 
 			sum += currentVec.x * nextVec.y - currentVec.y * nextVec.x;
 		}

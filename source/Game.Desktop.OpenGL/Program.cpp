@@ -92,7 +92,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nShowCmd);
 
-	auto world = InitWorld(TestCase::CircleVsCircle);
+	auto world = InitWorld(TestCase::CircleVsPolygon);
 
 	ContextSettings settings = InitOpenGLSettings();
 

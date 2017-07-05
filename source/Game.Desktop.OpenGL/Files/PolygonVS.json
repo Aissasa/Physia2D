@@ -1,14 +1,14 @@
 {
 	"Position": {
-		"x": 200,
-		"y": 200
+		"x": 250,
+		"y": 400
 	},
-	"Rotation": 0.2,
+	"Rotation": 0,
 	"LinearVel": {
-		"x": 15,
-		"y": 20
+		"x": 5,
+		"y": -40
 	},
-	"AngularVel": 0.8,
+	"AngularVel": 0,
 	"GravityScale": 1,
 	"Fixture": {
 		"Density": 0.9,
