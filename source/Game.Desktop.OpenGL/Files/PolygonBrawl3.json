@@ -1,17 +1,17 @@
 {
 	"Position": {
-		"x": 520,
-		"y": 570
+		"x": 250,
+		"y": 400
 	},
-	"Rotation": 0,
+	"Rotation": 0.8,
 	"LinearVel": {
-		"x": -40,
-		"y": -50
+		"x": 80,
+		"y": 20
 	},
 	"AngularVel": 0,
 	"GravityScale": 1,
 	"Fixture": {
-		"Density": 0.9,
+		"Density": 4,
 		"Bounciness": 0.2,
 		"Friction": 1,
 		"Shape": {

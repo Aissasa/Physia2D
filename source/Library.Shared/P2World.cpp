@@ -32,6 +32,7 @@ namespace Physia2D
 			return false;
 		}
 
+		body->SetWorld(*this);
 		mBodies.push_back(body);
 		return true;
 	}
@@ -57,7 +58,7 @@ namespace Physia2D
 		assert(elapsedTime > 0);
 
 		auto pairs = P2BroadPhase::GetInstance().GetPotentiallyCollidingPairs(mBodies);
-		P2Collision::GetInstance().ResolveCollisions(pairs);
+		P2Collision::GetInstance().ResolveCollisions(pairs, elapsedTime);
 
 		for (auto& body : mBodies)
 		{

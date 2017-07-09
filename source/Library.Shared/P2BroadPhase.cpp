@@ -28,13 +28,8 @@ namespace Physia2D
 		for (uint32_t i = 0; i < bodies.size(); ++i)
 		{
 			aabb1 = bodies[i]->GetFixture()->GetShape()->ComputeAABB(bodies[i]->GetTransform());
-			for (uint32_t j = i; j < bodies.size(); ++j)
+			for (uint32_t j = i + 1; j < bodies.size(); ++j)
 			{
-				if (i == j)
-				{
-					continue;
-				}
-
 				aabb2 = bodies[j]->GetFixture()->GetShape()->ComputeAABB(bodies[j]->GetTransform());
 				if (collisionManager.AABBvsAABBOverlap(aabb1, aabb2))
 				{

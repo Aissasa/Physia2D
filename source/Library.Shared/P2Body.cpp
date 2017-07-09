@@ -8,10 +8,13 @@ using namespace glm;
 
 namespace Physia2D
 {
+	const float32_t P2Body::kCollisionColorChangeTime = 0.2f;
+
 	/*******************************************************/
 	P2Body::P2Body(const P2BodyConfig& bodyConfig) :
 		mTransform(bodyConfig.Position, bodyConfig.Rotation), mLinearVelocity(bodyConfig.LinearVelocity), mAngularVelocity(bodyConfig.AngularVelocity),
-		mForce(0), mTorque(0), mWorld(nullptr), mFixture(nullptr), mMass(0), mInvMass(0), mInertia(0), mInvInertia(0), mGravityScale(bodyConfig.GravityScale), mIsColliding(false)
+		mForce(0), mTorque(0), mWorld(nullptr), mFixture(nullptr), mMass(0), mInvMass(0), mInertia(0), mInvInertia(0), mGravityScale(bodyConfig.GravityScale),
+		mIsColliding(false), mCollisionTimer(kCollisionColorChangeTime)
 	{
 	}
 
@@ -43,6 +46,16 @@ namespace Physia2D
 	{
 		mTransform.Position += mLinearVelocity * elapsedTime;
 		mTransform.Rotation = mTransform.Rotation.GetRotation() + mAngularVelocity * elapsedTime;
+
+		if (mIsColliding)
+		{
+			mCollisionTimer -= elapsedTime;
+			if (mCollisionTimer <= 0)
+			{
+				mCollisionTimer = kCollisionColorChangeTime;
+				mIsColliding = false;
+			}
+		}
 	}
 
 	/*******************************************************/
@@ -137,9 +150,14 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	P2World* P2Body::GetWorld() const
+	const P2World* P2Body::GetWorld() const
 	{
 		return mWorld;
+	}
+
+	void P2Body::SetWorld(const P2World& world)
+	{
+		mWorld = &world;
 	}
 
 	/*******************************************************/
@@ -173,8 +191,8 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	void P2Body::SetIsColliding(const bool colliding)
+	void P2Body::SetIsColliding()
 	{
-		mIsColliding = colliding;
+		mIsColliding = true;
 	}
 }

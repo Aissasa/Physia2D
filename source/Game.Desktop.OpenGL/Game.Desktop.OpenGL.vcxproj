@@ -41,10 +41,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Files\Circle1.json" />
+    <None Include="Files\CircleBrawl1.json" />
+    <None Include="Files\CircleBrawl2.json" />
+    <None Include="Files\CircleBrawl3.json" />
+    <None Include="Files\CircleBrawl4.json" />
     <None Include="Files\CircleVS.json" />
     <None Include="Files\Circle2.json" />
     <None Include="Files\Polygon1.json" />
     <None Include="Files\Polygon2.json" />
+    <None Include="Files\PolygonBrawl1.json" />
+    <None Include="Files\PolygonBrawl2.json" />
+    <None Include="Files\PolygonBrawl3.json" />
+    <None Include="Files\PolygonBrawl4.json" />
     <None Include="Files\PolygonVS.json" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

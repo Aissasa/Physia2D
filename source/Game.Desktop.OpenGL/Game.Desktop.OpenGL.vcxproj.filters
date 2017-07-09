@@ -35,5 +35,29 @@
     <None Include="Files\Circle1.json">
       <Filter>Files</Filter>
     </None>
+    <None Include="Files\CircleBrawl2.json">
+      <Filter>Files</Filter>
+    </None>
+    <None Include="Files\CircleBrawl3.json">
+      <Filter>Files</Filter>
+    </None>
+    <None Include="Files\PolygonBrawl1.json">
+      <Filter>Files</Filter>
+    </None>
+    <None Include="Files\PolygonBrawl2.json">
+      <Filter>Files</Filter>
+    </None>
+    <None Include="Files\CircleBrawl1.json">
+      <Filter>Files</Filter>
+    </None>
+    <None Include="Files\PolygonBrawl3.json">
+      <Filter>Files</Filter>
+    </None>
+    <None Include="Files\PolygonBrawl4.json">
+      <Filter>Files</Filter>
+    </None>
+    <None Include="Files\CircleBrawl4.json">
+      <Filter>Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

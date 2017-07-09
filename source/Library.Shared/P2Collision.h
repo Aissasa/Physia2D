@@ -19,6 +19,16 @@ namespace Physia2D
 
 		glm::vec2 LowerVert;
 		glm::vec2 UpperVert;
+
+		glm::vec2 GetExtents() const
+		{
+			return UpperVert - LowerVert;
+		}
+
+		glm::vec2 GetCenter() const
+		{
+			return LowerVert + GetExtents() / 2.f;
+		}
 	};
 
 	/** Struct that holds information about a collision point.
@@ -50,22 +60,22 @@ namespace Physia2D
 
 		static P2Collision& GetInstance();
 
-		void ResolveCollisions(std::vector<PotentiallyCollidingPair>& pairs);
+		void ResolveCollisions(std::vector<PotentiallyCollidingPair>& pairs, const glm::float32_t elapsedTime) const;
 
-		void ResolveCollision(P2Body& body1, P2Body& body2, const Manifold& manifold);
+		void ResolveCollision(P2Body& body1, P2Body& body2, const Manifold& manifold, const glm::float32_t elapsedTime) const;
 
-		bool TestOverlap(const P2Body& body1, const P2Body& body2, Manifold& manifold);
+		bool TestOverlap(const P2Body& body1, const P2Body& body2, Manifold& manifold, const glm::float32_t elapsedTime) const;
 
 		bool CircleCircleCollision(const P2CircleShape& circle1, const P2Transform& trans1,
-								   const P2CircleShape& circle2, const P2Transform& trans2, Manifold& manifold);
+								   const P2CircleShape& circle2, const P2Transform& trans2, Manifold& manifold) const;
 
 		bool PolygonPolygonCollision(const P2PolygonShape& polygon1, const P2Transform& trans1,
-									 const P2PolygonShape& polygon2, const P2Transform& trans2, Manifold& manifold);
+									 const P2PolygonShape& polygon2, const P2Transform& trans2, Manifold& manifold) const;
 
 		bool CirclePolygonCollision(const P2CircleShape& circle, const P2Transform& circleTrans,
-									const P2PolygonShape& polygon, const P2Transform& polygonTrans, Manifold& manifold);
+									const P2PolygonShape& polygon, const P2Transform& polygonTrans, Manifold& manifold) const;
 
-		bool AABBvsAABBOverlap(const P2AABB& aabb1, const P2AABB& aabb2);
+		bool AABBvsAABBOverlap(const P2AABB& aabb1, const P2AABB& aabb2) const;
 
 	private:
 

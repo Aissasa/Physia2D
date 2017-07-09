@@ -5,13 +5,13 @@
 	},
 	"Rotation": 0,
 	"LinearVel": {
-		"x": 30,
-		"y": 40
+		"x": 40,
+		"y": 55
 	},
-	"AngularVel": 1,
+	"AngularVel": 0,
 	"GravityScale": 1,
 	"Fixture": {
-		"Density": 0.9,
+		"Density": 2,
 		"Bounciness": 0.2,
 		"Friction": 1,
 		"Shape": {

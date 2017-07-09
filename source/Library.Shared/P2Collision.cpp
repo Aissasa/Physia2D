@@ -18,39 +18,52 @@ namespace Physia2D
 	}
 
 	/***********************************************************************************************/
-	void P2Collision::ResolveCollisions(vector<PotentiallyCollidingPair>& pairs)
+	void P2Collision::ResolveCollisions(vector<PotentiallyCollidingPair>& pairs, const float32_t elapsedTime) const
 	{
 		for (auto& pair : pairs)
 		{
 			Manifold manifold;
-			if (TestOverlap(*pair.first, *pair.second, manifold))
+			if (TestOverlap(*pair.first, *pair.second, manifold, elapsedTime))
 			{
 				// for rendering
-				pair.first->SetIsColliding(true);
-				pair.second->SetIsColliding(true);
-				ResolveCollision(*pair.first, *pair.second, manifold);
-			}
-			else
-			{
-				// for rendering
-				pair.first->SetIsColliding(false);
-				pair.second->SetIsColliding(false);
+				pair.first->SetIsColliding();
+				pair.second->SetIsColliding();
+				ResolveCollision(*pair.first, *pair.second, manifold, elapsedTime);
 			}
 		}
 	}
 
 	/***********************************************************************************************/
-	void P2Collision::ResolveCollision(P2Body& body1, P2Body& body2, const Manifold& manifold)
+	void P2Collision::ResolveCollision(P2Body& body1, P2Body& body2, const Manifold& manifold, const float32_t elapsedTime) const
 	{
 		// Calculate relative velocity
 		vec2 relativeVel = body2.GetLinearVelocity() - body1.GetLinearVelocity();
 
+		P2Transform body1PotentialTransform = body1.GetTransform();
+		P2Transform body2PotentialTransform = body2.GetTransform();
+		body1PotentialTransform.Position += body1.GetLinearVelocity() * elapsedTime;
+		body1PotentialTransform.Rotation = body1PotentialTransform.Rotation.GetRotation() + body1.GetAngularVelocity() * elapsedTime;
+		body2PotentialTransform.Position += body2.GetLinearVelocity() * elapsedTime;
+		body2PotentialTransform.Rotation = body2PotentialTransform.Rotation.GetRotation() + body2.GetAngularVelocity() * elapsedTime;
+
+		vec2 body1Center = body1.GetFixture()->GetShape()->ComputeAABB(body1PotentialTransform).GetCenter();
+		vec2 body2Center = body2.GetFixture()->GetShape()->ComputeAABB(body2PotentialTransform).GetCenter();
+
+		// if the bodies are not moving towards each other, than do nothing
+		if (dot(body1Center - body2Center, relativeVel) <= 0)
+		{
+			return;
+		}
+
 		// Calculate relative velocity in terms of the normal direction
 		float32_t velAlongNormal = dot(manifold.Normal, relativeVel);
 
-		// Do not resolve if velocities are separating
-		if (velAlongNormal > 0)
+		if (body1.GetFixture()->GetShape()->GetType() == P2Shape::EType::Polygon &&
+			body2.GetFixture()->GetShape()->GetType() == P2Shape::EType::Polygon &&
+			velAlongNormal > 0)
+		{
 			return;
+		}
 
 		// Calculate restitution
 		float32_t e = glm::min(body1.GetFixture()->GetBounciness(), body2.GetFixture()->GetBounciness());
@@ -66,13 +79,20 @@ namespace Physia2D
 	}
 
 	/***********************************************************************************************/
-	bool P2Collision::TestOverlap(const P2Body& body1, const P2Body& body2, Manifold& manifold)
+	bool P2Collision::TestOverlap(const P2Body& body1, const P2Body& body2, Manifold& manifold, const float32_t elapsedTime) const
 	{
 		if (body1.GetFixture() == nullptr || body1.GetFixture()->GetShape() == nullptr ||
 			body2.GetFixture() == nullptr || body2.GetFixture()->GetShape() == nullptr)
 		{
 			return false;
 		}
+
+		P2Transform body1PotentialTransform = body1.GetTransform();
+		P2Transform body2PotentialTransform = body2.GetTransform();
+		body1PotentialTransform.Position += body1.GetLinearVelocity() * elapsedTime;
+		body1PotentialTransform.Rotation = body1PotentialTransform.Rotation.GetRotation() + body1.GetAngularVelocity() * elapsedTime;
+		body2PotentialTransform.Position += body2.GetLinearVelocity() * elapsedTime;
+		body2PotentialTransform.Rotation = body2PotentialTransform.Rotation.GetRotation() + body2.GetAngularVelocity() * elapsedTime;
 
 		switch (body1.GetFixture()->GetShape()->GetType())
 		{
@@ -82,13 +102,13 @@ namespace Physia2D
 				{
 					case P2Shape::EType::Circle:
 					{
-						return CircleCircleCollision(*body1.GetFixture()->GetShape()->As<P2CircleShape>(), body1.GetTransform(),
-													 *body2.GetFixture()->GetShape()->As<P2CircleShape>(), body2.GetTransform(), manifold);
+						return CircleCircleCollision(*body1.GetFixture()->GetShape()->As<P2CircleShape>(), body1PotentialTransform,
+													 *body2.GetFixture()->GetShape()->As<P2CircleShape>(), body2PotentialTransform, manifold);
 					}
 					case P2Shape::EType::Polygon:
 					{
-						return CirclePolygonCollision(*body1.GetFixture()->GetShape()->As<P2CircleShape>(), body1.GetTransform(),
-													  *body2.GetFixture()->GetShape()->As<P2PolygonShape>(), body2.GetTransform(), manifold);
+						return CirclePolygonCollision(*body1.GetFixture()->GetShape()->As<P2CircleShape>(), body1PotentialTransform,
+													  *body2.GetFixture()->GetShape()->As<P2PolygonShape>(), body2PotentialTransform, manifold);
 					}
 					default:;
 				}
@@ -100,13 +120,13 @@ namespace Physia2D
 				{
 					case P2Shape::EType::Circle:
 					{
-						return CirclePolygonCollision(*body2.GetFixture()->GetShape()->As<P2CircleShape>(), body2.GetTransform(),
-													  *body1.GetFixture()->GetShape()->As<P2PolygonShape>(), body1.GetTransform(), manifold);
+						return CirclePolygonCollision(*body2.GetFixture()->GetShape()->As<P2CircleShape>(), body2PotentialTransform,
+													  *body1.GetFixture()->GetShape()->As<P2PolygonShape>(), body1PotentialTransform, manifold);
 					}
 					case P2Shape::EType::Polygon:
 					{
-						return PolygonPolygonCollision(*body2.GetFixture()->GetShape()->As<P2PolygonShape>(), body2.GetTransform(),
-													   *body1.GetFixture()->GetShape()->As<P2PolygonShape>(), body1.GetTransform(), manifold);
+						return PolygonPolygonCollision(*body2.GetFixture()->GetShape()->As<P2PolygonShape>(), body2PotentialTransform,
+													   *body1.GetFixture()->GetShape()->As<P2PolygonShape>(), body1PotentialTransform, manifold);
 					}
 					default:;
 				}
@@ -120,7 +140,7 @@ namespace Physia2D
 
 	/***********************************************************************************************/
 	bool P2Collision::CircleCircleCollision(const P2CircleShape& circle1, const P2Transform& trans1,
-											const P2CircleShape& circle2, const P2Transform& trans2, Manifold& manifold)
+											const P2CircleShape& circle2, const P2Transform& trans2, Manifold& manifold) const
 	{
 		// rotate and translate the shapes
 		vec2 center1 = MathHelper::GetInstance().RotateAndTranslateVertex(circle1.GetCenterPosition(), trans1);
@@ -155,16 +175,20 @@ namespace Physia2D
 
 	/***********************************************************************************************/
 	bool P2Collision::PolygonPolygonCollision(const P2PolygonShape& polygon1, const P2Transform& trans1,
-											  const P2PolygonShape& polygon2, const P2Transform& trans2, Manifold& manifold)
+											  const P2PolygonShape& polygon2, const P2Transform& trans2, Manifold& manifold) const
 	{
-		// todo populate manifold
-		UNREFERENCED_PARAMETER(manifold);
-
 		// rotate and translate the shapes
 		vector<vec2> vertices1 = polygon1.GetRotatedAndTranslatedVertices(trans1);
 		vector<vec2> vertices2 = polygon2.GetRotatedAndTranslatedVertices(trans2);
 
 		vec2 edge;
+		float32_t minIntervalDistance = MathHelper::GetInstance().MaxFloat();
+		bool isIntersecting = true;
+		vec2 normalToUse;
+
+		// todo change this with the translated and rotated center of the polygon !!!
+		vec2 fromPoly2ToPoly1 = trans1.Position - trans2.Position;
+
 		// Loop through all the vertices of both polygons and create the current edge off of them
 		for (uint32_t vertexIndex = 0; vertexIndex < polygon1.VerticesCount() + polygon2.VerticesCount(); ++vertexIndex)
 		{
@@ -191,21 +215,44 @@ namespace Physia2D
 			auto interval2 = ProjectPolygonOnAxis(vertices2, axis);
 
 			// Check if the polygon projections are currentlty intersecting
-			if (interval1.IntervalDistance(interval2) > 0)
+			float32_t currentIntervalDistance = interval1.IntervalDistance(interval2);
+			if (currentIntervalDistance > 0)
 			{
-				return false;
+				isIntersecting = false;
+			}
+
+			// update the min intersection and normal : to be used in case of collision to populate the manifold
+			currentIntervalDistance = abs(currentIntervalDistance);
+			if (minIntervalDistance > currentIntervalDistance)
+			{
+				minIntervalDistance = currentIntervalDistance;
+				normalToUse = axis;
+				if (dot(normalToUse, fromPoly2ToPoly1) < 0)
+				{
+					normalToUse = -normalToUse;
+				}
 			}
 		}
-		return true;
+
+		if (isIntersecting)
+		{
+			manifold.Penetration = minIntervalDistance;
+			manifold.Normal = normalToUse;
+		}
+
+		return isIntersecting;
 	}
 
 	/***********************************************************************************************/
 	bool P2Collision::CirclePolygonCollision(const P2CircleShape& circle, const P2Transform& circleTrans,
-											 const P2PolygonShape& polygon, const P2Transform& polygonTrans, Manifold& manifold)
+											 const P2PolygonShape& polygon, const P2Transform& polygonTrans, Manifold& manifold) const
 	{
 		// rotate and translate the shapes
 		vec2 circleCenter = MathHelper::GetInstance().RotateAndTranslateVertex(circle.GetCenterPosition(), circleTrans);
 		vector<vec2> polygonVertices = polygon.GetRotatedAndTranslatedVertices(polygonTrans);
+
+		// todo change this with the translated and rotated center of the polygon !!!
+		vec2 fromCircleToPolygon = polygon.ComputeAABB(polygonTrans).GetCenter() - circleCenter;
 
 		// init variables
 		vec2 vertex = polygonVertices.back();
@@ -227,6 +274,10 @@ namespace Physia2D
 				{
 					manifold.Penetration = circle.GetRadius() - distance;
 					manifold.Normal = axis / distance;
+					if (dot(manifold.Normal, fromCircleToPolygon) < 0)
+					{
+						manifold.Normal = -manifold.Normal;
+					}
 				}
 				else
 				{
@@ -267,12 +318,15 @@ namespace Physia2D
 				// check edge and circle collision
 				if (MathHelper::GetInstance().LengthSquared(axis) <= circle.GetRadiusSqr())
 				{
-					vec2 normal = MathHelper::GetInstance().RightHandNormal(edge);
-					float32_t distance = length(normal);
+					float32_t distance = length(axis);
 					if (distance != 0)
 					{
 						manifold.Penetration = circle.GetRadius() - distance;
-						manifold.Normal = normal / distance;
+						manifold.Normal = axis / distance;
+						if (dot(manifold.Normal, fromCircleToPolygon) < 0)
+						{
+							manifold.Normal = -manifold.Normal;
+						}
 					}
 					else
 					{
@@ -321,12 +375,13 @@ namespace Physia2D
 	}
 
 	/***********************************************************************************************/
-	bool P2Collision::AABBvsAABBOverlap(const P2AABB& aabb1, const P2AABB& aabb2)
+	bool P2Collision::AABBvsAABBOverlap(const P2AABB& aabb1, const P2AABB& aabb2) const
 	{
-		if (aabb1.UpperVert.x < aabb2.LowerVert.x || aabb1.LowerVert.x > aabb1.UpperVert.x) return false;
-		if (aabb1.UpperVert.y < aabb2.LowerVert.y || aabb1.LowerVert.y > aabb2.UpperVert.y) return false;
-
-		return true;
+		// todo recheck this
+		return aabb1.LowerVert.x < aabb2.UpperVert.x && // left of R1 is not on the right of R2
+			aabb2.LowerVert.x < aabb1.UpperVert.x && // left of R2 is not on the right of R1
+			aabb1.UpperVert.y > aabb2.LowerVert.y && // top of R1 is not below bottom of R2
+			aabb2.UpperVert.y > aabb1.LowerVert.y;   // top of R2 is not below bottom of R1
 	}
 
 	/***********************************************************************************************/

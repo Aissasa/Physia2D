@@ -61,16 +61,19 @@ namespace Physia2D
 		void SetGravityScale(const glm::float32_t gravityScale);
 
 		std::shared_ptr<P2Fixture> GetFixture() const;
-		P2World* GetWorld() const;
+		const P2World* GetWorld() const;
+		void SetWorld(const P2World& world);
 
 		glm::float32_t GetMass() const;
 		glm::float32_t GetInvMass() const;
 		glm::float32_t GetInertia() const;
 		glm::float32_t GetInvInertia() const;
 
-
 		bool IsColliding() const;
-		void SetIsColliding(const bool colliding);
+		void SetIsColliding();
+
+
+
 	private:
 
 		friend class P2World;
@@ -82,7 +85,7 @@ namespace Physia2D
 		glm::vec2 mForce;
 		glm::float32_t mTorque;
 
-		P2World* mWorld;
+		const P2World* mWorld;
 		std::shared_ptr<P2Fixture> mFixture;
 
 		glm::float32_t mMass;
@@ -94,5 +97,8 @@ namespace Physia2D
 
 		// todo for rendering purposes : remove it later
 		bool mIsColliding;
+		glm::float32_t mCollisionTimer;
+
+		static const glm::float32_t kCollisionColorChangeTime;
 	};
 }
