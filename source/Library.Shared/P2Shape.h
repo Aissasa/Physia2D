@@ -35,6 +35,8 @@ namespace Physia2D
 		virtual P2AABB ComputeAABB(const P2Transform& transform) const = 0;
 		virtual P2MassData ComputeMass(const glm::float32_t density) const = 0;
 
+		virtual glm::vec2 GetCenter() const = 0;
+
 		EType GetType() const;
 		void SetType(const EType type);
 

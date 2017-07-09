@@ -143,8 +143,8 @@ namespace Physia2D
 											const P2CircleShape& circle2, const P2Transform& trans2, Manifold& manifold) const
 	{
 		// rotate and translate the shapes
-		vec2 center1 = MathHelper::GetInstance().RotateAndTranslateVertex(circle1.GetCenterPosition(), trans1);
-		vec2 center2 = MathHelper::GetInstance().RotateAndTranslateVertex(circle2.GetCenterPosition(), trans2);
+		vec2 center1 = MathHelper::GetInstance().RotateAndTranslateVertex(circle1.GetCenter(), trans1);
+		vec2 center2 = MathHelper::GetInstance().RotateAndTranslateVertex(circle2.GetCenter(), trans2);
 
 		float32_t distanceSqr = MathHelper::GetInstance().LengthSquared(center2 - center1);
 		float32_t radiusSqrSum = (circle1.GetRadius() + circle2.GetRadius()) * (circle1.GetRadius() + circle2.GetRadius());
@@ -187,7 +187,8 @@ namespace Physia2D
 		vec2 normalToUse;
 
 		// todo change this with the translated and rotated center of the polygon !!!
-		vec2 fromPoly2ToPoly1 = trans1.Position - trans2.Position;
+		vec2 fromPoly2ToPoly1 = MathHelper::GetInstance().RotateAndTranslateVertex(polygon1.GetCenter(), trans1)
+			- MathHelper::GetInstance().RotateAndTranslateVertex(polygon1.GetCenter(), trans2);
 
 		// Loop through all the vertices of both polygons and create the current edge off of them
 		for (uint32_t vertexIndex = 0; vertexIndex < polygon1.VerticesCount() + polygon2.VerticesCount(); ++vertexIndex)
@@ -248,11 +249,11 @@ namespace Physia2D
 											 const P2PolygonShape& polygon, const P2Transform& polygonTrans, Manifold& manifold) const
 	{
 		// rotate and translate the shapes
-		vec2 circleCenter = MathHelper::GetInstance().RotateAndTranslateVertex(circle.GetCenterPosition(), circleTrans);
+		vec2 circleCenter = MathHelper::GetInstance().RotateAndTranslateVertex(circle.GetCenter(), circleTrans);
 		vector<vec2> polygonVertices = polygon.GetRotatedAndTranslatedVertices(polygonTrans);
 
 		// todo change this with the translated and rotated center of the polygon !!!
-		vec2 fromCircleToPolygon = polygon.ComputeAABB(polygonTrans).GetCenter() - circleCenter;
+		vec2 fromCircleToPolygon = MathHelper::GetInstance().RotateAndTranslateVertex(polygon.GetCenter(), polygonTrans) - circleCenter;
 
 		// init variables
 		vec2 vertex = polygonVertices.back();
@@ -377,7 +378,6 @@ namespace Physia2D
 	/***********************************************************************************************/
 	bool P2Collision::AABBvsAABBOverlap(const P2AABB& aabb1, const P2AABB& aabb2) const
 	{
-		// todo recheck this
 		return aabb1.LowerVert.x < aabb2.UpperVert.x && // left of R1 is not on the right of R2
 			aabb2.LowerVert.x < aabb1.UpperVert.x && // left of R2 is not on the right of R1
 			aabb1.UpperVert.y > aabb2.LowerVert.y && // top of R1 is not below bottom of R2

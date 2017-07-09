@@ -84,8 +84,12 @@ namespace Testbed
 		CircleShape circle;
 		circle.setPosition(bodyTransform.Position.x, bodyTransform.Position.y);
 		circle.setRotation(MathHelper::GetInstance().FromRadiansToDegrees(bodyTransform.Rotation.GetRotation()));
-		circle.setOrigin(circleShape.GetCenterPosition().x + circleShape.GetRadius(), circleShape.GetCenterPosition().y + circleShape.GetRadius());
+		circle.setOrigin(circleShape.GetCenter().x + circleShape.GetRadius(), circleShape.GetCenter().y + circleShape.GetRadius());
 		circle.setRadius(circleShape.GetRadius());
+
+		RectangleShape rectangle(Vector2f(circle.getRadius(), OUTLINE_THICKNESS));
+		rectangle.setPosition(circle.getPosition().x, circle.getPosition().y);
+		rectangle.setRotation(circle.getRotation());
 
 		Color colorToUse = colliding ? mCircleCollisionColor : mCircleColor;
 
@@ -94,13 +98,18 @@ namespace Testbed
 			circle.setFillColor(Color(0, 0, 0, 0));
 			circle.setOutlineColor(colorToUse);
 			circle.setOutlineThickness(OUTLINE_THICKNESS);
+			rectangle.setFillColor(Color(0, 0, 0, 0));
+			rectangle.setOutlineColor(colorToUse);
+			rectangle.setOutlineThickness(OUTLINE_THICKNESS);
 		}
 		else
 		{
 			circle.setFillColor(colorToUse);
+			rectangle.setFillColor(colorToUse);
 		}
 
 		window.draw(circle);
+		window.draw(rectangle);
 	}
 
 	/**********************************************************************************************/

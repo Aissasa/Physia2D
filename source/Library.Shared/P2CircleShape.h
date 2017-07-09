@@ -19,7 +19,8 @@ namespace Physia2D
 		virtual P2AABB ComputeAABB(const P2Transform& transform) const override;
 		virtual P2MassData ComputeMass(const glm::float32_t density) const override;
 
-		glm::vec2 GetCenterPosition() const;
+		virtual glm::vec2 GetCenter() const override;
+
 		void SetCenterPosition(const glm::vec2& position);
 		glm::float32_t GetRadius() const;
 		void SetRadius(const glm::float32_t radius);

@@ -11,8 +11,8 @@ namespace Physia2D
 	const float32_t P2PolygonShape::PolygonEdgeWidth = 0.05f;
 
 	/*******************************************************/
-	P2PolygonShape::P2PolygonShape():
-		mVertices(), mCentroid()
+	P2PolygonShape::P2PolygonShape() :
+		mVertices(), mCentroid(), mArea(0)
 	{
 		mType = EType::Polygon;
 	}
@@ -23,7 +23,6 @@ namespace Physia2D
 		P2PolygonShape* newShape = new P2PolygonShape();
 		newShape->mType = mType;
 		newShape->SetVertices(mVertices);
-		newShape->mCentroid = mCentroid;
 
 		return newShape;
 	}
@@ -53,19 +52,29 @@ namespace Physia2D
 	/*******************************************************/
 	P2MassData P2PolygonShape::ComputeMass(const float32_t density) const
 	{
-		// todo compute center and intertia using trianglation : https://www.experts-exchange.com/questions/20986874/Calculating-Polygon-Inertia.html pointyears comment
 		P2MassData massData;
 
-		float32_t area = CalculateArea();
+		float32_t area = ComputeArea(mVertices);
 		massData.Mass = area * density;
+		massData.Center = mCentroid;
+		massData.Inertia = ComputeInertia(density);
 
 		return massData;
+	}
+
+	/*******************************************************/
+	vec2 P2PolygonShape::GetCenter() const
+	{
+		return mCentroid;
 	}
 
 	/*******************************************************/
 	bool P2PolygonShape::SetVertices(vector<vec2>& vertices)
 	{
 		mVertices = vertices;
+
+		mArea = ComputeArea(mVertices);
+		mCentroid = ComputeCentroid(mArea);
 
 		return true;
 	}
@@ -80,6 +89,7 @@ namespace Physia2D
 		mVertices.push_back(upper);
 		mVertices.push_back(upperLeft);
 
+		mArea = ComputeArea(mVertices);
 		mCentroid = (upper - lower) / 2.0f;
 
 		return true;
@@ -116,18 +126,78 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	float32_t P2PolygonShape::CalculateArea() const
+	float32_t P2PolygonShape::ComputeArea(const vector<vec2>& verts) const
 	{
 		float32_t sum = 0;
+
+		for (uint32_t i = 0; i < verts.size(); ++i)
+		{
+			vec2 currentVec = verts[i];
+			vec2 nextVec = verts[(i + 1) % verts.size()];
+
+			sum += currentVec.x * nextVec.y - currentVec.y * nextVec.x;
+		}
+
+		return glm::abs(sum / 2.0f);
+	}
+
+	/*******************************************************/
+	vec2 P2PolygonShape::ComputeCentroid(const float32_t area) const
+	{
+		float32_t cx = 0;
+		float32_t cy = 0;
 
 		for (uint32_t i = 0; i < mVertices.size(); ++i)
 		{
 			vec2 currentVec = mVertices[i];
 			vec2 nextVec = mVertices[(i + 1) % mVertices.size()];
 
-			sum += currentVec.x * nextVec.y - currentVec.y * nextVec.x;
+			cx += (currentVec.x + nextVec.x) * (currentVec.x * nextVec.y - nextVec.x * currentVec.y);
+		}
+		cx /= 6 * area;
+
+		for (uint32_t i = 0; i < mVertices.size(); ++i)
+		{
+			vec2 currentVec = mVertices[i];
+			vec2 nextVec = mVertices[(i + 1) % mVertices.size()];
+
+			cy += (currentVec.y + nextVec.y) * (currentVec.x * nextVec.y - nextVec.x * currentVec.y);
 		}
 
-		return glm::abs(sum / 2.0f);
+		cy /= 6 * area;
+
+		return vec2(cx, cy);
+	}
+
+	/*******************************************************/
+	float32_t P2PolygonShape::ComputeInertia(const float32_t density) const
+	{
+		float32_t total = 0;
+
+		for (uint32_t i = 0; i < mVertices.size(); ++i)
+		{
+			vec2 currentVec = mVertices[i];
+			vec2 nextVec = mVertices[(i + 1) % mVertices.size()];
+
+			vector<vec2> triangle;
+			triangle.push_back(mCentroid);
+			triangle.push_back(currentVec);
+			triangle.push_back(nextVec);
+
+			float32_t area = ComputeArea(triangle);
+			float32_t mass = area * density;
+			//vec2 triangleCenter = ComputeCentroid(area);
+
+			//I_{ triangle } = m / 36 * (x1*(y3 - y2) + x2*(y1 - y3) + x3*(y2 - y1))*(x1 ^ 2 + x2 ^ 2 + x3 ^ 2 – x1*x2 – x1*x3 – x2*x3 + y1 ^ 2 + y2 ^ 2 + y3 ^ 2 – y1*y2 – y1*y3 – y2*y3)
+			float32_t triangleInertia = (mass / 36) * ((mCentroid.x * (nextVec.y - currentVec.y) + currentVec.x * (mCentroid.y - nextVec.y)) *
+				(mCentroid.x * mCentroid.x + currentVec.x * currentVec.x + nextVec.x * nextVec.x -
+				 mCentroid.x * currentVec.x - mCentroid.x * nextVec.x - currentVec.x +
+				 mCentroid.y * mCentroid.y + currentVec.y * currentVec.y + nextVec.y * nextVec.y -
+				 mCentroid.y * currentVec.y - mCentroid.y * nextVec.y - currentVec.y));
+
+			total += triangleInertia;
+		}
+
+		return total;
 	}
 }

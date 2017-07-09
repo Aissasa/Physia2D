@@ -8,7 +8,7 @@
 		"x": -20,
 		"y": 80
 	},
-	"AngularVel": 0.5,
+	"AngularVel": 0,
 	"GravityScale": 1,
 	"Fixture": {
 		"Density": 1,

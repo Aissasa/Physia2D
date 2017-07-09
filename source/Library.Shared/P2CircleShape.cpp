@@ -54,7 +54,7 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	vec2 P2CircleShape::GetCenterPosition() const
+	vec2 P2CircleShape::GetCenter() const
 	{
 		return mCenterPosition;
 	}

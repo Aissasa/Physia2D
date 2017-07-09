@@ -125,7 +125,7 @@ namespace UnitTestLibraryDesktop
 
 			P2CircleShape circleShape(vec2(shapeValue["Position"]["x"].GetFloat(), shapeValue["Position"]["y"].GetFloat()), shapeValue["Radius"].GetFloat());
 			Assert::AreEqual(3.0f, circleShape.GetRadius());
-			Assert::IsTrue(vec2(0.2f, 0.3f) == circleShape.GetCenterPosition());
+			Assert::IsTrue(vec2(0.2f, 0.3f) == circleShape.GetCenter());
 
 			P2FixtureConfig fixtureConfig;
 			fixtureConfig.Density = fixtureValue["Density"].GetFloat();
@@ -166,7 +166,7 @@ namespace UnitTestLibraryDesktop
 			auto shape = body->GetFixture()->GetShape()->As<P2CircleShape>();
 			Assert::IsNotNull(shape);
 			Assert::AreEqual(3.0f, shape->GetRadius());
-			Assert::IsTrue(vec2(0.2f, 0.3f) == shape->GetCenterPosition());
+			Assert::IsTrue(vec2(0.2f, 0.3f) == shape->GetCenter());
 		}
 
 		/**********************************************************************************************/
