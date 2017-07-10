@@ -21,6 +21,7 @@
 #define POLYGON_1_FILE "Files/Polygon1.json"
 #define POLYGON_2_FILE "Files/Polygon2.json"
 #define POLYGON_VS_FILE "Files/PolygonVS.json"
+#define POLYGON_STATIC_FILE "Files/PolygonStatic.json"
 
 #define CIRCLE_BRAWL_1_FILE "Files/CircleBrawl1.json"
 #define CIRCLE_BRAWL_2_FILE "Files/CircleBrawl2.json"
@@ -87,6 +88,7 @@ shared_ptr<P2World> InitWorld(const TestCase testCase = TestCase::CircleVsCircle
 		string body5File = POLYGON_BRAWL_2_FILE;
 		string body6File = POLYGON_BRAWL_3_FILE;
 		string body8File = POLYGON_BRAWL_4_FILE;
+		string body9File = POLYGON_STATIC_FILE;
 
 		auto body1 = parser.ParseBody(body1File);
 		auto body2 = parser.ParseBody(body2File);
@@ -96,6 +98,7 @@ shared_ptr<P2World> InitWorld(const TestCase testCase = TestCase::CircleVsCircle
 		auto body6 = parser.ParseBody(body6File);
 		auto body7 = parser.ParseBody(body7File);
 		auto body8 = parser.ParseBody(body8File);
+		auto body9 = parser.ParseBody(body9File);
 		world->AddBody(body1);
 		world->AddBody(body2);
 		world->AddBody(body3);
@@ -104,6 +107,7 @@ shared_ptr<P2World> InitWorld(const TestCase testCase = TestCase::CircleVsCircle
 		world->AddBody(body6);
 		world->AddBody(body7);
 		world->AddBody(body8);
+		world->AddBody(body9);
 
 		return world;
 	}

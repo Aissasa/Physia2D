@@ -87,7 +87,7 @@ namespace Testbed
 		circle.setOrigin(circleShape.GetCenter().x + circleShape.GetRadius(), circleShape.GetCenter().y + circleShape.GetRadius());
 		circle.setRadius(circleShape.GetRadius());
 
-		RectangleShape rectangle(Vector2f(circle.getRadius(), OUTLINE_THICKNESS));
+		RectangleShape rectangle(Vector2f(circle.getRadius(), 2));
 		rectangle.setPosition(circle.getPosition().x, circle.getPosition().y);
 		rectangle.setRotation(circle.getRotation());
 
@@ -105,7 +105,7 @@ namespace Testbed
 		else
 		{
 			circle.setFillColor(colorToUse);
-			rectangle.setFillColor(colorToUse);
+			rectangle.setFillColor(Color::Black);
 		}
 
 		window.draw(circle);

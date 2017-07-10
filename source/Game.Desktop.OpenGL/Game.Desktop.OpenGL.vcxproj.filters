@@ -59,5 +59,8 @@
     <None Include="Files\CircleBrawl4.json">
       <Filter>Files</Filter>
     </None>
+    <None Include="Files\PolygonStatic.json">
+      <Filter>Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

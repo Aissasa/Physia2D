@@ -53,6 +53,7 @@
     <None Include="Files\PolygonBrawl2.json" />
     <None Include="Files\PolygonBrawl3.json" />
     <None Include="Files\PolygonBrawl4.json" />
+    <None Include="Files\PolygonStatic.json" />
     <None Include="Files\PolygonVS.json" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

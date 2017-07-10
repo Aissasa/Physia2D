@@ -7,15 +7,29 @@ namespace Physia2D
 {
 	class P2World;
 
+	/** Enum expressing the type of a body.
+	 * Static: zero mass, zero velocity, may be manually moved
+	 * Kinematic: zero mass, non-zero velocity set by user, moved by update
+	 * Dynamic: positive mass, non-zero velocity determined by forces, moved by
+	*/
+	enum class P2BodyType
+	{
+		Static,
+		Dynamic,
+		Kinematic,
+		Max
+	};
+
 	/** Struct that encapsulates the configuration of a body.
 	*/
 	struct P2BodyConfig
 	{
 		P2BodyConfig() :
-			Position(0), Rotation(0), LinearVelocity(0), AngularVelocity(0), GravityScale(0)
+			Type(P2BodyType::Dynamic), Position(0), Rotation(0), LinearVelocity(0), AngularVelocity(0), GravityScale(0)
 		{
 		}
 
+		P2BodyType Type;
 		glm::vec2 Position;
 		glm::float32_t Rotation;
 		glm::vec2 LinearVelocity;
@@ -28,8 +42,6 @@ namespace Physia2D
 	class P2Body final
 	{
 	public:
-
-		// todo add body types enum : static, dynamic, kinamatic
 
 		P2Body(const P2BodyConfig& bodyConfig);
 		~P2Body();
@@ -72,11 +84,16 @@ namespace Physia2D
 		bool IsColliding() const;
 		void SetIsColliding();
 
-
+		P2BodyType GetBodyType() const;
+		void SetBodyType(const P2BodyType bodyType);
 
 	private:
 
 		friend class P2World;
+
+		void UpdateForces(const glm::float32_t elapsedTime);
+		void UpdateVelocity(const glm::float32_t elapsedTime);
+		void UpdatePosition(const glm::float32_t elapsedTime);
 
 		P2Transform mTransform;
 		glm::vec2 mLinearVelocity;
@@ -94,6 +111,8 @@ namespace Physia2D
 		glm::float32_t mInvInertia;
 
 		glm::float32_t mGravityScale;
+
+		P2BodyType mBodyType;
 
 		// todo for rendering purposes : remove it later
 		bool mIsColliding;

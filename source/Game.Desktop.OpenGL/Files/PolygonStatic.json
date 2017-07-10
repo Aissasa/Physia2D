@@ -1,17 +1,18 @@
 {
+	"Type":  0,
 	"Position": {
-		"x": 1050,
-		"y": 250
+		"x": 10,
+		"y": 10
 	},
-	"Rotation": -1.5,
+	"Rotation": 0,
 	"LinearVel": {
-		"x": -25,
-		"y": 60
+		"x": 5,
+		"y": -40
 	},
 	"AngularVel": 0,
 	"GravityScale": 1,
 	"Fixture": {
-		"Density": 2,
+		"Density": 0.9,
 		"Bounciness": 0.2,
 		"Friction": 1,
 		"Shape": {
@@ -22,20 +23,12 @@
 					"y": 0
 				},
 				{
-					"x": 100,
+					"x": 1370,
 					"y": 0
 				},
 				{
-					"x": 150,
+					"x": 1370,
 					"y": 50
-				},
-				{
-					"x": 100,
-					"y": 100
-				},
-				{
-					"x": -50,
-					"y": 100
 				},
 				{
 					"x": 0,

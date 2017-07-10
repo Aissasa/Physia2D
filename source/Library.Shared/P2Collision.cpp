@@ -36,34 +36,13 @@ namespace Physia2D
 	/***********************************************************************************************/
 	void P2Collision::ResolveCollision(P2Body& body1, P2Body& body2, const Manifold& manifold, const float32_t elapsedTime) const
 	{
+		auto& math = MathHelper::GetInstance();
+
 		// Calculate relative velocity
 		vec2 relativeVel = body2.GetLinearVelocity() - body1.GetLinearVelocity();
 
-		P2Transform body1PotentialTransform = body1.GetTransform();
-		P2Transform body2PotentialTransform = body2.GetTransform();
-		body1PotentialTransform.Position += body1.GetLinearVelocity() * elapsedTime;
-		body1PotentialTransform.Rotation = body1PotentialTransform.Rotation.GetRotation() + body1.GetAngularVelocity() * elapsedTime;
-		body2PotentialTransform.Position += body2.GetLinearVelocity() * elapsedTime;
-		body2PotentialTransform.Rotation = body2PotentialTransform.Rotation.GetRotation() + body2.GetAngularVelocity() * elapsedTime;
-
-		vec2 body1Center = body1.GetFixture()->GetShape()->ComputeAABB(body1PotentialTransform).GetCenter();
-		vec2 body2Center = body2.GetFixture()->GetShape()->ComputeAABB(body2PotentialTransform).GetCenter();
-
-		// if the bodies are not moving towards each other, than do nothing
-		if (dot(body1Center - body2Center, relativeVel) <= 0)
-		{
-			return;
-		}
-
 		// Calculate relative velocity in terms of the normal direction
 		float32_t velAlongNormal = dot(manifold.Normal, relativeVel);
-
-		if (body1.GetFixture()->GetShape()->GetType() == P2Shape::EType::Polygon &&
-			body2.GetFixture()->GetShape()->GetType() == P2Shape::EType::Polygon &&
-			velAlongNormal > 0)
-		{
-			return;
-		}
 
 		// Calculate restitution
 		float32_t e = glm::min(body1.GetFixture()->GetBounciness(), body2.GetFixture()->GetBounciness());
@@ -74,8 +53,42 @@ namespace Physia2D
 
 		// Apply impulse
 		vec2 impulse = j * manifold.Normal;
-		body1.SetLinearVelocity(body1.GetLinearVelocity() - body1.GetInvMass() * impulse);
-		body2.SetLinearVelocity(body2.GetLinearVelocity() + body2.GetInvMass() * impulse);
+		vec2 vel1 = body1.GetLinearVelocity() - body1.GetInvMass() * impulse;
+		vec2 vel2 = body2.GetLinearVelocity() + body2.GetInvMass() * impulse;
+
+		// compute the potential position with the new velocity
+		P2Transform body1PotentialTransform = body1.GetTransform();
+		P2Transform body2PotentialTransform = body2.GetTransform();
+		body1PotentialTransform.Position += vel1 * elapsedTime;
+		body1PotentialTransform.Rotation = body1PotentialTransform.Rotation.GetRotation() + body1.GetAngularVelocity() * elapsedTime;
+		body2PotentialTransform.Position += vel2 * elapsedTime;
+		body2PotentialTransform.Rotation = body2PotentialTransform.Rotation.GetRotation() + body2.GetAngularVelocity() * elapsedTime;
+
+		vec2 body1PotentialCenter = math.RotateAndTranslateVertex(body1.GetFixture()->GetShape()->GetCenter(), body1PotentialTransform);
+		vec2 body2PotentialCenter = math.RotateAndTranslateVertex(body2.GetFixture()->GetShape()->GetCenter(), body2PotentialTransform);
+		vec2 fromPotCenter2ToPotCenter1 = body1PotentialCenter - body2PotentialCenter;
+
+		// compute the potential position with the old velocity
+		P2Transform body1trans = body1.GetTransform();
+		P2Transform body2trans = body2.GetTransform();
+		body1trans.Position += body1.GetLinearVelocity() * elapsedTime;
+		body1trans.Rotation = body1PotentialTransform.Rotation.GetRotation() + body1.GetAngularVelocity() * elapsedTime;
+		body2trans.Position += body2.GetLinearVelocity() * elapsedTime;
+		body2trans.Rotation = body2PotentialTransform.Rotation.GetRotation() + body2.GetAngularVelocity() * elapsedTime;
+
+		vec2 body1Center = math.RotateAndTranslateVertex(body1.GetFixture()->GetShape()->GetCenter(), body1trans);
+		vec2 body2Center = math.RotateAndTranslateVertex(body2.GetFixture()->GetShape()->GetCenter(), body2trans);
+		vec2 fromCenter2ToCenter1 = body1Center - body2Center;
+
+		// if the bodies are not moving towards each other, than do nothing
+		if (dot(fromPotCenter2ToPotCenter1, relativeVel) < 0 && 
+			math.LengthSquared(fromPotCenter2ToPotCenter1) < math.LengthSquared(fromCenter2ToCenter1))
+		{
+			return;
+		}
+
+		body1.SetLinearVelocity(vel1);
+		body2.SetLinearVelocity(vel2);
 	}
 
 	/***********************************************************************************************/

@@ -13,9 +13,14 @@ namespace Physia2D
 	/*******************************************************/
 	P2Body::P2Body(const P2BodyConfig& bodyConfig) :
 		mTransform(bodyConfig.Position, bodyConfig.Rotation), mLinearVelocity(bodyConfig.LinearVelocity), mAngularVelocity(bodyConfig.AngularVelocity),
-		mForce(0), mTorque(0), mWorld(nullptr), mFixture(nullptr), mMass(0), mInvMass(0), mInertia(0), mInvInertia(0), mGravityScale(bodyConfig.GravityScale),
-		mIsColliding(false), mCollisionTimer(kCollisionColorChangeTime)
+		mForce(0), mTorque(0), mWorld(nullptr), mFixture(nullptr), mMass(0), mInvMass(0), mInertia(0), mInvInertia(0), mGravityScale(bodyConfig.GravityScale), 
+		mBodyType(bodyConfig.Type), mIsColliding(false), mCollisionTimer(kCollisionColorChangeTime)
 	{
+		if (mBodyType == P2BodyType::Static)
+		{
+			mLinearVelocity = vec2(0);
+			mAngularVelocity = 0;
+		}
 	}
 
 	/*******************************************************/
@@ -44,8 +49,10 @@ namespace Physia2D
 	/*******************************************************/
 	void P2Body::Update(const float32_t elapsedTime)
 	{
-		mTransform.Position += mLinearVelocity * elapsedTime;
-		mTransform.Rotation = mTransform.Rotation.GetRotation() + mAngularVelocity * elapsedTime;
+
+		UpdateForces(elapsedTime);
+		UpdateVelocity(elapsedTime);
+		UpdatePosition(elapsedTime);
 
 		if (mIsColliding)
 		{
@@ -61,13 +68,14 @@ namespace Physia2D
 	/*******************************************************/
 	void P2Body::ResetMassData()
 	{
-		if (mFixture && mFixture->GetShape())
+		// we need mass data only when the body is dynamic
+		if (mBodyType == P2BodyType::Dynamic && mFixture && mFixture->GetShape())
 		{
 			P2MassData massData = mFixture->GetShape()->ComputeMass(mFixture->GetDensity());
 			mMass = massData.Mass;
-			mInvMass = 1 / mMass;
+			mInvMass = mMass == 0 ? mInvMass = 0 : mInvMass = 1 / mMass;
 			mInertia = massData.Inertia;
-			mInvInertia = 1 / mInertia;
+			mInvInertia = mInertia == 0 ? mInvInertia = 0 : mInvInertia = 1 / mInertia;
 		}
 	}
 
@@ -92,7 +100,10 @@ namespace Physia2D
 	/*******************************************************/
 	void P2Body::SetLinearVelocity(const vec2& linearVelocity)
 	{
-		mLinearVelocity = linearVelocity;
+		if (mBodyType != P2BodyType::Static)
+		{
+			mLinearVelocity = linearVelocity;
+		}
 	}
 
 	/*******************************************************/
@@ -155,6 +166,7 @@ namespace Physia2D
 		return mWorld;
 	}
 
+	/*******************************************************/
 	void P2Body::SetWorld(const P2World& world)
 	{
 		mWorld = &world;
@@ -194,5 +206,39 @@ namespace Physia2D
 	void P2Body::SetIsColliding()
 	{
 		mIsColliding = true;
+	}
+
+	/*******************************************************/
+	P2BodyType P2Body::GetBodyType() const
+	{
+		return mBodyType;
+	}
+
+	/*******************************************************/
+	void P2Body::SetBodyType(const P2BodyType bodyType)
+	{
+		mBodyType = bodyType;
+	}
+
+	/*******************************************************/
+	void P2Body::UpdateForces(const float32_t elapsedTime)
+	{
+		elapsedTime;
+	}
+
+	/*******************************************************/
+	void P2Body::UpdateVelocity(const float32_t elapsedTime)
+	{
+		elapsedTime;
+	}
+
+	/*******************************************************/
+	void P2Body::UpdatePosition(const float32_t elapsedTime)
+	{
+		if (mBodyType != P2BodyType::Static)
+		{
+			mTransform.Position += mLinearVelocity * elapsedTime;
+			mTransform.Rotation = mTransform.Rotation.GetRotation() + mAngularVelocity * elapsedTime;
+		}
 	}
 }

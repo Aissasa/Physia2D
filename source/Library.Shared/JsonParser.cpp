@@ -38,6 +38,14 @@ namespace Physia2D
 	shared_ptr<P2Body> JsonParser::ParseBody(const Value& doc) const
 	{
 		P2BodyConfig bodyConfig;
+		if (doc.HasMember("Type"))
+		{
+			uint32_t type = doc["Type"].GetUint();
+			if (type < static_cast<uint32_t>(P2BodyType::Max))
+			{
+				bodyConfig.Type = static_cast<P2BodyType>(type);
+			}
+		}
 		bodyConfig.Position.x = doc["Position"]["x"].GetFloat();
 		bodyConfig.Position.y = doc["Position"]["y"].GetFloat();
 		bodyConfig.Rotation = doc["Rotation"].GetFloat();
@@ -58,7 +66,7 @@ namespace Physia2D
 
 		unique_ptr<P2Shape> shape;
 
-		switch (shapeValue["Type"].GetInt())
+		switch (shapeValue["Type"].GetUint())
 		{
 			// polygon
 			case 2:

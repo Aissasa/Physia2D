@@ -5,8 +5,8 @@
 	},
 	"Rotation": 0,
 	"LinearVel": {
-		"x": 5,
-		"y": -40
+		"x": 0,
+		"y": 0
 	},
 	"AngularVel": 0,
 	"GravityScale": 1,
