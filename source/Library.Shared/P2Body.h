@@ -91,7 +91,7 @@ namespace Physia2D
 
 		friend class P2World;
 
-		void UpdateForces(const glm::float32_t elapsedTime);
+		void UpdateForces();
 		void UpdateVelocity(const glm::float32_t elapsedTime);
 		void UpdatePosition(const glm::float32_t elapsedTime);
 

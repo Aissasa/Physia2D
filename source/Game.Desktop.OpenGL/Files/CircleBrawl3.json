@@ -6,12 +6,12 @@
 	"Rotation": 0,
 	"LinearVel": {
 		"x": -10,
-		"y": 50
+		"y": 0
 	},
 	"AngularVel": 0.5,
 	"GravityScale": 1,
 	"Fixture": {
-		"Density": 2,
+		"Density": 0.7,
 		"Bounciness": 0.2,
 		"Friction": 1,
 		"Shape": {

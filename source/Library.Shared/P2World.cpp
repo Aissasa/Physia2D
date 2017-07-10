@@ -58,11 +58,17 @@ namespace Physia2D
 		assert(elapsedTime > 0);
 
 		auto pairs = P2BroadPhase::GetInstance().GetPotentiallyCollidingPairs(mBodies);
-		P2Collision::GetInstance().ResolveCollisions(pairs, elapsedTime);
+		auto collidingPairs = P2Collision::GetInstance().ResolveCollisions(pairs, elapsedTime);
 
 		for (auto& body : mBodies)
 		{
 			body->Update(elapsedTime);
+		}
+
+		// positional correction
+		for (auto& collidingPair : collidingPairs)
+		{
+			P2Collision::GetInstance().PositionalCorrection(*collidingPair.first.first, *collidingPair.first.second, collidingPair.second);
 		}
 	}
 

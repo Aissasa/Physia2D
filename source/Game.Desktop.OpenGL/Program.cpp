@@ -52,6 +52,11 @@ shared_ptr<P2World> InitWorld(const TestCase testCase = TestCase::CircleVsCircle
 	// setup the world
 	shared_ptr<P2World> world = make_shared<P2World>();
 	JsonParser& parser = JsonParser::GetInstance();
+
+	string bodySFile = POLYGON_STATIC_FILE;
+	auto bodyS = parser.ParseBody(bodySFile);
+	world->AddBody(bodyS);
+
 	string body1File;
 	string body2File;
 
@@ -88,7 +93,6 @@ shared_ptr<P2World> InitWorld(const TestCase testCase = TestCase::CircleVsCircle
 		string body5File = POLYGON_BRAWL_2_FILE;
 		string body6File = POLYGON_BRAWL_3_FILE;
 		string body8File = POLYGON_BRAWL_4_FILE;
-		string body9File = POLYGON_STATIC_FILE;
 
 		auto body1 = parser.ParseBody(body1File);
 		auto body2 = parser.ParseBody(body2File);
@@ -98,7 +102,6 @@ shared_ptr<P2World> InitWorld(const TestCase testCase = TestCase::CircleVsCircle
 		auto body6 = parser.ParseBody(body6File);
 		auto body7 = parser.ParseBody(body7File);
 		auto body8 = parser.ParseBody(body8File);
-		auto body9 = parser.ParseBody(body9File);
 		world->AddBody(body1);
 		world->AddBody(body2);
 		world->AddBody(body3);
@@ -107,7 +110,6 @@ shared_ptr<P2World> InitWorld(const TestCase testCase = TestCase::CircleVsCircle
 		world->AddBody(body6);
 		world->AddBody(body7);
 		world->AddBody(body8);
-		world->AddBody(body9);
 
 		return world;
 	}

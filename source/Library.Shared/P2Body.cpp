@@ -13,7 +13,7 @@ namespace Physia2D
 	/*******************************************************/
 	P2Body::P2Body(const P2BodyConfig& bodyConfig) :
 		mTransform(bodyConfig.Position, bodyConfig.Rotation), mLinearVelocity(bodyConfig.LinearVelocity), mAngularVelocity(bodyConfig.AngularVelocity),
-		mForce(0), mTorque(0), mWorld(nullptr), mFixture(nullptr), mMass(0), mInvMass(0), mInertia(0), mInvInertia(0), mGravityScale(bodyConfig.GravityScale), 
+		mForce(0), mTorque(0), mWorld(nullptr), mFixture(nullptr), mMass(0), mInvMass(0), mInertia(0), mInvInertia(0), mGravityScale(bodyConfig.GravityScale),
 		mBodyType(bodyConfig.Type), mIsColliding(false), mCollisionTimer(kCollisionColorChangeTime)
 	{
 		if (mBodyType == P2BodyType::Static)
@@ -50,7 +50,7 @@ namespace Physia2D
 	void P2Body::Update(const float32_t elapsedTime)
 	{
 
-		UpdateForces(elapsedTime);
+		UpdateForces();
 		UpdateVelocity(elapsedTime);
 		UpdatePosition(elapsedTime);
 
@@ -205,6 +205,7 @@ namespace Physia2D
 	/*******************************************************/
 	void P2Body::SetIsColliding()
 	{
+		mCollisionTimer = kCollisionColorChangeTime;
 		mIsColliding = true;
 	}
 
@@ -221,15 +222,21 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	void P2Body::UpdateForces(const float32_t elapsedTime)
+	void P2Body::UpdateForces()
 	{
-		elapsedTime;
+		if (mBodyType == P2BodyType::Dynamic)
+		{
+			mForce = mWorld->GetGravity();
+		}
 	}
 
 	/*******************************************************/
 	void P2Body::UpdateVelocity(const float32_t elapsedTime)
 	{
-		elapsedTime;
+		if (mBodyType == P2BodyType::Dynamic)
+		{
+			mLinearVelocity += mForce * mGravityScale * mMass * elapsedTime;
+		}
 	}
 
 	/*******************************************************/

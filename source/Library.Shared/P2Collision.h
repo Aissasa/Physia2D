@@ -52,6 +52,7 @@ namespace Physia2D
 	public:
 
 		typedef std::pair<std::shared_ptr<P2Body>, std::shared_ptr<P2Body>> PotentiallyCollidingPair;
+		typedef std::pair<PotentiallyCollidingPair, Manifold> CollidingPair;
 
 		P2Collision(const P2Collision &) = delete;
 		P2Collision(const P2Collision &&) = delete;
@@ -60,9 +61,11 @@ namespace Physia2D
 
 		static P2Collision& GetInstance();
 
-		void ResolveCollisions(std::vector<PotentiallyCollidingPair>& pairs, const glm::float32_t elapsedTime) const;
+		std::vector<CollidingPair> ResolveCollisions(std::vector<PotentiallyCollidingPair>& pairs, const glm::float32_t elapsedTime) const;
 
-		void ResolveCollision(P2Body& body1, P2Body& body2, const Manifold& manifold, const glm::float32_t elapsedTime) const;
+		bool ResolveCollision(P2Body& body1, P2Body& body2, const Manifold& manifold, const glm::float32_t elapsedTime) const;
+
+		void PositionalCorrection(P2Body& body1, P2Body& body2, const Manifold& manifold) const;
 
 		bool TestOverlap(const P2Body& body1, const P2Body& body2, Manifold& manifold, const glm::float32_t elapsedTime) const;
 
@@ -98,5 +101,7 @@ namespace Physia2D
 
 		static ProjectionInterval ProjectPolygonOnAxis(const std::vector<glm::vec2> vertices, const glm::vec2& axis);
 
+		static const glm::float32_t kSlop; // Penetration allowance
+		static const glm::float32_t kPercent; // Penetration percentage to correct
 	};
 }

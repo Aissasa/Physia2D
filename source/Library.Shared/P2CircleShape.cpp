@@ -46,9 +46,9 @@ namespace Physia2D
 		float32_t sqrRad = mRadius * mRadius;
 
 		float32_t area = pi<float32_t>() * sqrRad;
-		massData.Mass = area * density;
+		massData.Mass = area * density / 1000.f;
 		massData.Center = mCenterPosition;
-		massData.Inertia = 0.5f * massData.Mass * sqrRad;
+		massData.Inertia = 0.5f * massData.Mass * sqrRad / 1000.f;
 
 		return massData;
 	}
