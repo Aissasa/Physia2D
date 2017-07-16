@@ -63,7 +63,7 @@ namespace Physia2D
 
 		std::vector<CollidingPair> ResolveCollisions(std::vector<PotentiallyCollidingPair>& pairs, const glm::float32_t elapsedTime) const;
 
-		bool ResolveCollision(P2Body& body1, P2Body& body2, const Manifold& manifold, const glm::float32_t elapsedTime) const;
+		bool ResolveCollision(P2Body& body1, P2Body& body2, Manifold& manifold, const glm::float32_t elapsedTime) const;
 
 		void PositionalCorrection(P2Body& body1, P2Body& body2, const Manifold& manifold) const;
 
@@ -103,5 +103,7 @@ namespace Physia2D
 
 		static const glm::float32_t kSlop; // Penetration allowance
 		static const glm::float32_t kPercent; // Penetration percentage to correct
+
+		static const glm::float32_t kDynamicFrictionMultiplier; // Penetration percentage to correct
 	};
 }

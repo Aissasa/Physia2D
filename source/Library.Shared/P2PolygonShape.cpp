@@ -186,7 +186,6 @@ namespace Physia2D
 
 			float32_t area = ComputeArea(triangle);
 			float32_t mass = area * density;
-			//vec2 triangleCenter = ComputeCentroid(area);
 
 			//I_{ triangle } = m / 36 * (x1*(y3 - y2) + x2*(y1 - y3) + x3*(y2 - y1))*(x1 ^ 2 + x2 ^ 2 + x3 ^ 2 – x1*x2 – x1*x3 – x2*x3 + y1 ^ 2 + y2 ^ 2 + y3 ^ 2 – y1*y2 – y1*y3 – y2*y3)
 			float32_t triangleInertia = (mass / 36) * ((mCentroid.x * (nextVec.y - currentVec.y) + currentVec.x * (mCentroid.y - nextVec.y)) *

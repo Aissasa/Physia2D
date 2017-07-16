@@ -13,7 +13,7 @@
 	"Fixture": {
 		"Density": 0.1,
 		"Bounciness": 0.2,
-		"Friction": 1,
+		"Friction": 0.4,
 		"Shape": {
 			"Type": 2,
 			"Vertices": [

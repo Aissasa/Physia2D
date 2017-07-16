@@ -49,7 +49,6 @@ namespace Physia2D
 	/*******************************************************/
 	void P2Body::Update(const float32_t elapsedTime)
 	{
-
 		UpdateForces();
 		UpdateVelocity(elapsedTime);
 		UpdatePosition(elapsedTime);
@@ -226,16 +225,16 @@ namespace Physia2D
 	{
 		if (mBodyType == P2BodyType::Dynamic)
 		{
-			mForce = mWorld->GetGravity();
+			mForce = mWorld->GetGravity() * mGravityScale;
 		}
 	}
 
 	/*******************************************************/
 	void P2Body::UpdateVelocity(const float32_t elapsedTime)
 	{
-		if (mBodyType == P2BodyType::Dynamic)
+		if (mBodyType != P2BodyType::Static)
 		{
-			mLinearVelocity += mForce * mGravityScale * mMass * elapsedTime;
+			mLinearVelocity += mForce * mMass * elapsedTime;
 		}
 	}
 

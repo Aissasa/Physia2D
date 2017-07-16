@@ -13,6 +13,8 @@ namespace Physia2D
 
 	const float32_t P2Collision::kSlop = 0.01f;
 	const float32_t P2Collision::kPercent = 0.1f;
+	
+	const float32_t P2Collision::kDynamicFrictionMultiplier = 0.7f;
 
 	/***********************************************************************************************/
 	P2Collision& P2Collision::GetInstance()
@@ -49,9 +51,10 @@ namespace Physia2D
 	}
 
 	/***********************************************************************************************/
-	bool P2Collision::ResolveCollision(P2Body& body1, P2Body& body2, const Manifold& manifold, const float32_t elapsedTime) const
+	bool P2Collision::ResolveCollision(P2Body& body1, P2Body& body2, Manifold& manifold, const float32_t elapsedTime) const
 	{
 		auto& math = MathHelper::GetInstance();
+		bool collided = true;
 
 		// Calculate relative velocity
 		vec2 relativeVel = body2.GetLinearVelocity() - body1.GetLinearVelocity();
@@ -62,14 +65,14 @@ namespace Physia2D
 		// Calculate restitution
 		float32_t e = glm::min(body1.GetFixture()->GetBounciness(), body2.GetFixture()->GetBounciness());
 
-		// Calculate impulse scalar
-		float j = -(1 + e) * velAlongNormal;
-		j /= body1.GetInvMass() + body2.GetInvMass();
+		// Calculate impulse scalar along the normal
+		float jNormal = -(1 + e) * velAlongNormal;
+		jNormal /= body1.GetInvMass() + body2.GetInvMass();
 
 		// Apply impulse
-		vec2 impulse = j * manifold.Normal;
-		vec2 vel1 = body1.GetLinearVelocity() - body1.GetInvMass() * impulse;
-		vec2 vel2 = body2.GetLinearVelocity() + body2.GetInvMass() * impulse;
+		vec2 nImpulse = jNormal * manifold.Normal;
+		vec2 vel1 = body1.GetLinearVelocity() - body1.GetInvMass() * nImpulse;
+		vec2 vel2 = body2.GetLinearVelocity() + body2.GetInvMass() * nImpulse;
 
 		// compute the potential position with the new velocity
 		P2Transform body1PotentialTransform = body1.GetTransform();
@@ -96,23 +99,63 @@ namespace Physia2D
 		vec2 fromCenter2ToCenter1 = body1Center - body2Center;
 
 		// if the bodies are not moving towards each other, than do nothing
-		if (dot(fromPotCenter2ToPotCenter1, relativeVel) < 0 && 
+		if (dot(fromPotCenter2ToPotCenter1, relativeVel) < 0 &&
 			math.LengthSquared(fromPotCenter2ToPotCenter1) < math.LengthSquared(fromCenter2ToCenter1))
 		{
-			return false;
+			collided = false;
+		}
+
+		// compute the friction impulse
+		relativeVel = vel2 - vel1;
+		vec2 tangent = relativeVel - dot(relativeVel, manifold.Normal) * manifold.Normal;
+
+		// the body is not stationary
+		if (tangent.x != 0 || tangent.y != 0)
+		{
+			tangent /= length(tangent);
+
+			float32_t jTangent = -dot(relativeVel, tangent);
+			jTangent /= body1.GetInvMass() + body2.GetInvMass();
+
+			// Coulomb's Law : i chose mu as the avg of both frictions, and 0.7f the dynamic friction multiplier
+			float32_t mu = (body1.GetFixture()->GetFriction() + body2.GetFixture()->GetFriction()) / 2.f;
+			vec2 frictionImpulse;
+
+			if (abs(jTangent) < abs(jNormal * mu))
+			{
+				frictionImpulse = jTangent * tangent;
+			}
+			else
+			{
+				float32_t dynamicMu = mu * kDynamicFrictionMultiplier;
+				frictionImpulse = -jNormal * tangent * dynamicMu;
+			}
+
+			// apply friction to the velocity
+			if (collided)
+			{
+				vel1 -= body1.GetInvMass() * frictionImpulse;
+				vel2 += body2.GetInvMass() * frictionImpulse;
+			}
+			else
+			{
+				// override the normal impulse if they are not going in different directions
+				vel1 = body1.GetLinearVelocity() - body1.GetInvMass() * frictionImpulse;
+				vel2 = body2.GetLinearVelocity() + body2.GetInvMass() * frictionImpulse;
+			}
 		}
 
 		body1.SetLinearVelocity(vel1);
 		body2.SetLinearVelocity(vel2);
 
-		return true;
+		return collided;
 	}
 
 	/***********************************************************************************************/
 	void P2Collision::PositionalCorrection(P2Body& body1, P2Body& body2, const Manifold& manifold) const
 	{
 		auto& math = MathHelper::GetInstance();
-		vec2 fromB1ToB2 = math.RotateAndTranslateVertex(body1.GetFixture()->GetShape()->GetCenter(), body1.GetTransform()) 
+		vec2 fromB1ToB2 = math.RotateAndTranslateVertex(body1.GetFixture()->GetShape()->GetCenter(), body1.GetTransform())
 			- math.RotateAndTranslateVertex(body2.GetFixture()->GetShape()->GetCenter(), body2.GetTransform());
 
 		// reverse the normal if necessary
@@ -208,7 +251,7 @@ namespace Physia2D
 		}
 
 		// circles are colliding, so we will build the manifold
-		vec2 vec = center2 - center1;		
+		vec2 vec = center2 - center1;
 		float32_t distance = length(vec);
 
 		if (distance != 0)
@@ -379,7 +422,7 @@ namespace Physia2D
 					{
 						manifold.Penetration = circle.GetRadius() - distance;
 						manifold.Normal = axis / distance;
-						if (dot(manifold.Normal, fromCircleToPolygon) < 0)
+						if (dot(manifold.Normal, fromCircleToPolygon) > 0)
 						{
 							manifold.Normal = -manifold.Normal;
 						}
