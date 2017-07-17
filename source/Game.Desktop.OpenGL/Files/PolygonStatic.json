@@ -6,15 +6,15 @@
 	},
 	"Rotation": 0,
 	"LinearVel": {
-		"x": 5,
-		"y": -40
+		"x": 0,
+		"y": 0
 	},
 	"AngularVel": 0,
 	"GravityScale": 1,
 	"Fixture": {
 		"Density": 0.0,
-		"Bounciness": 0.4,
-		"Friction": 0.2,
+		"Bounciness": 0.6,
+		"Friction": 0.3,
 		"Shape": {
 			"Type": 2,
 			"Vertices": [

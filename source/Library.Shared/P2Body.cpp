@@ -50,7 +50,7 @@ namespace Physia2D
 	void P2Body::Update(const float32_t elapsedTime)
 	{
 		UpdateForces();
-		UpdateVelocity(elapsedTime);
+		UpdateVelocities(elapsedTime);
 		UpdatePosition(elapsedTime);
 
 		if (mIsColliding)
@@ -225,16 +225,17 @@ namespace Physia2D
 	{
 		if (mBodyType == P2BodyType::Dynamic)
 		{
-			mForce = mWorld->GetGravity() * mGravityScale;
+			mForce = mWorld->GetGravity() * mGravityScale * mMass;
 		}
 	}
 
 	/*******************************************************/
-	void P2Body::UpdateVelocity(const float32_t elapsedTime)
+	void P2Body::UpdateVelocities(const float32_t elapsedTime)
 	{
 		if (mBodyType != P2BodyType::Static)
 		{
-			mLinearVelocity += mForce * mMass * elapsedTime;
+			mLinearVelocity += mForce * mInvMass * elapsedTime;
+			//mAngularVelocity += mTorque * mInertia * elapsedTime;
 		}
 	}
 

@@ -53,10 +53,14 @@ namespace Physia2D
 		glm::vec2 RotateAndTranslateVertex(const glm::vec2& vec, const P2Transform& transform) const;
 		glm::vec2 RotateVertex(const glm::vec2& vec, const P2Rotation& rotation) const;
 
-		glm::vec2 LeftHandNormal(glm::vec2 v1, glm::vec2 v2) const;
-		glm::vec2 LeftHandNormal(glm::vec2 v) const;
-		glm::vec2 RightHandNormal(glm::vec2 v1, glm::vec2 v2) const;
-		glm::vec2 RightHandNormal(glm::vec2 v) const;
+		glm::vec2 LeftHandNormal(const glm::vec2& v1, const glm::vec2& v2) const;
+		glm::vec2 LeftHandNormal(const glm::vec2& v) const;
+		glm::vec2 RightHandNormal(const glm::vec2& v1, const glm::vec2& v2) const;
+		glm::vec2 RightHandNormal(const glm::vec2& v) const;
+
+		glm::float32_t CrossProduct(const glm::vec2& v1, const glm::vec2& v2) const;
+		glm::vec2 CrossProduct(const glm::vec2& v, const glm::float32_t s) const;
+		glm::vec2 CrossProduct(const glm::float32_t s, const glm::vec2& v) const;
 
 		glm::float32_t LengthSquared(glm::vec2 vec) const;
 		glm::float32_t MaxFloat() const;

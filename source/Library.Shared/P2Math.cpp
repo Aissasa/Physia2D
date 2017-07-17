@@ -91,29 +91,47 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	vec2 MathHelper::LeftHandNormal(vec2 v1, vec2 v2) const
+	vec2 MathHelper::LeftHandNormal(const vec2& v1, const vec2& v2) const
 	{
 		vec2 temp = v2 - v1;
 		return vec2(-temp.y, temp.x);
 	}
 
 	/*******************************************************/
-	vec2 MathHelper::LeftHandNormal(vec2 v) const
+	vec2 MathHelper::LeftHandNormal(const vec2& v) const
 	{
 		return vec2(-v.y, v.x);
 	}
 
 	/*******************************************************/
-	vec2 MathHelper::RightHandNormal(vec2 v1, vec2 v2) const
+	vec2 MathHelper::RightHandNormal(const vec2& v1, const vec2& v2) const
 	{
 		vec2 temp = v2 - v1;
 		return vec2(temp.y, -temp.x);
 	}
 
 	/*******************************************************/
-	vec2 MathHelper::RightHandNormal(vec2 v) const
+	vec2 MathHelper::RightHandNormal(const vec2& v) const
 	{
 		return vec2(v.y, -v.x);
+	}
+
+	/*******************************************************/
+	float32_t MathHelper::CrossProduct(const vec2& v1, const vec2& v2) const
+	{
+		return v1.x * v2.y - v1.y * v2.x;
+	}
+
+	/*******************************************************/
+	vec2 MathHelper::CrossProduct(const vec2& v, const float32_t s) const
+	{
+		return vec2(s * v.y, -s * v.x);
+	}
+
+	/*******************************************************/
+	vec2 MathHelper::CrossProduct(const float32_t s, const vec2& v) const
+	{
+		return CrossProduct(v, -s);
 	}
 
 	/*******************************************************/

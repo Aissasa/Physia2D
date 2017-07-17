@@ -8,7 +8,7 @@ namespace Physia2D
 	{
 	public:
 
-		P2World(const glm::vec2& gravity = glm::vec2(0, -9.8f));
+		P2World(const glm::vec2& gravity = glm::vec2(0, -98.f));
 		~P2World() = default;
 
 		std::shared_ptr<P2Body> CreateBody(const P2BodyConfig& bodyConfig);

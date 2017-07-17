@@ -55,9 +55,9 @@ namespace Physia2D
 		P2MassData massData;
 
 		float32_t area = ComputeArea(mVertices);
-		massData.Mass = area * density / 1000.f;
+		massData.Mass = area * density;
 		massData.Center = mCentroid;
-		massData.Inertia = ComputeInertia(density) / 1000.f;
+		massData.Inertia = ComputeInertia(density);
 
 		return massData;
 	}

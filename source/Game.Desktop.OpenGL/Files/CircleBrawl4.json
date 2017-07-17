@@ -11,7 +11,7 @@
 	"AngularVel": 0,
 	"GravityScale": 1,
 	"Fixture": {
-		"Density": 0.4,
+		"Density": 3.4,
 		"Bounciness": 0.2,
 		"Friction": 0.7,
 		"Shape": {

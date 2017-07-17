@@ -43,12 +43,11 @@ namespace Physia2D
 	P2MassData P2CircleShape::ComputeMass(const float32_t density) const
 	{
 		P2MassData massData;
-		float32_t sqrRad = mRadius * mRadius;
 
-		float32_t area = pi<float32_t>() * sqrRad;
-		massData.Mass = area * density / 1000.f;
+		float32_t area = pi<float32_t>() * mRadiusSqr;
+		massData.Mass = area * density;
 		massData.Center = mCenterPosition;
-		massData.Inertia = 0.5f * massData.Mass * sqrRad / 1000.f;
+		massData.Inertia = 0.5f * massData.Mass * mRadiusSqr;
 
 		return massData;
 	}
