@@ -4,6 +4,27 @@
 
 namespace Physia2D
 {
+	/** Struct that holds information about an edge.
+	*/
+	struct P2Edge
+	{
+		P2Edge(const glm::vec2& currentVertex = glm::vec2(0), const glm::vec2& nextVertex = glm::vec2(0), const glm::vec2& maxVertex = glm::vec2(0))
+			: CurrentVertex(currentVertex),
+			  NextVertex(nextVertex),
+			  MaxVertex(maxVertex)
+		{
+		}
+
+		glm::vec2 CurrentVertex;
+		glm::vec2 NextVertex;
+		glm::vec2 MaxVertex;
+
+		glm::vec2 ResultEdge() const { return NextVertex - CurrentVertex; }
+		glm::vec2 NormalizedResultEdge() const { return glm::normalize(ResultEdge()); }
+		glm::vec2 Normal() const { return MathHelper::GetInstance().RightHandNormal(ResultEdge()); }
+		glm::vec2 NormalizedNormal() const { return MathHelper::GetInstance().RightHandNormal(NormalizedResultEdge()); }
+	};
+
 	/** Class that represents the polygon shape.
 	*/
 	class P2PolygonShape : public P2Shape
@@ -35,7 +56,7 @@ namespace Physia2D
 	private:
 
 		glm::float32_t ComputeArea(const std::vector<glm::vec2>& verts) const;
-		glm::vec2 ComputeCentroid(const glm::float32_t area) const;
+		glm::vec2 ComputeCentroid(const std::vector<glm::vec2>& vertices, const glm::float32_t area) const;
 		glm::float32_t ComputeInertia(const glm::float32_t density) const;
 
 		std::vector<glm::vec2> mVertices;

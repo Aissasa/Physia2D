@@ -74,7 +74,7 @@ namespace Physia2D
 		mVertices = vertices;
 
 		mArea = ComputeArea(mVertices);
-		mCentroid = ComputeCentroid(mArea);
+		mCentroid = ComputeCentroid(mVertices, mArea);
 
 		return true;
 	}
@@ -142,24 +142,24 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	vec2 P2PolygonShape::ComputeCentroid(const float32_t area) const
+	vec2 P2PolygonShape::ComputeCentroid(const vector<vec2>& vertices, const float32_t area) const
 	{
 		float32_t cx = 0;
 		float32_t cy = 0;
 
-		for (uint32_t i = 0; i < mVertices.size(); ++i)
+		for (uint32_t i = 0; i < vertices.size(); ++i)
 		{
-			vec2 currentVec = mVertices[i];
-			vec2 nextVec = mVertices[(i + 1) % mVertices.size()];
+			vec2 currentVec = vertices[i];
+			vec2 nextVec = vertices[(i + 1) % vertices.size()];
 
 			cx += (currentVec.x + nextVec.x) * (currentVec.x * nextVec.y - nextVec.x * currentVec.y);
 		}
 		cx /= 6 * area;
 
-		for (uint32_t i = 0; i < mVertices.size(); ++i)
+		for (uint32_t i = 0; i < vertices.size(); ++i)
 		{
-			vec2 currentVec = mVertices[i];
-			vec2 nextVec = mVertices[(i + 1) % mVertices.size()];
+			vec2 currentVec = vertices[i];
+			vec2 nextVec = vertices[(i + 1) % vertices.size()];
 
 			cy += (currentVec.y + nextVec.y) * (currentVec.x * nextVec.y - nextVec.x * currentVec.y);
 		}
@@ -194,7 +194,10 @@ namespace Physia2D
 				 mCentroid.y * mCentroid.y + currentVec.y * currentVec.y + nextVec.y * nextVec.y -
 				 mCentroid.y * currentVec.y - mCentroid.y * nextVec.y - currentVec.y));
 
-			total += triangleInertia;
+			vec2 triangleCenter = ComputeCentroid(triangle, area);
+			float32_t distanceSquared = MathHelper::GetInstance().LengthSquared(mCentroid - triangleCenter);
+
+			total += triangleInertia + mass * distanceSquared;
 		}
 
 		return total;

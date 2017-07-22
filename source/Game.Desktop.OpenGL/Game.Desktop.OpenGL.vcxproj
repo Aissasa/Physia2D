@@ -45,6 +45,7 @@
     <None Include="Files\CircleBrawl2.json" />
     <None Include="Files\CircleBrawl3.json" />
     <None Include="Files\CircleBrawl4.json" />
+    <None Include="Files\CircleStatic.json" />
     <None Include="Files\CircleVS.json" />
     <None Include="Files\Circle2.json" />
     <None Include="Files\Polygon1.json" />

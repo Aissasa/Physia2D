@@ -1,7 +1,8 @@
 {
+	"Type":  0,
 	"Position": {
-		"x": 600,
-		"y": 460
+		"x": 650,
+		"y": 250
 	},
 	"Rotation": 0,
 	"LinearVel": {
@@ -11,8 +12,8 @@
 	"AngularVel": 0,
 	"GravityScale": 1,
 	"Fixture": {
-		"Density": 0.9,
-		"Bounciness": 0.2,
+		"Density": 0,
+		"Bounciness": 0.6,
 		"Friction": 1,
 		"Shape": {
 			"Type": 1,
@@ -20,7 +21,7 @@
 				"x": 0,
 				"y": 0
 			},
-			"Radius": 50
+			"Radius": 100
 		}
 	}
 }

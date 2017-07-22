@@ -235,7 +235,7 @@ namespace Physia2D
 		if (mBodyType != P2BodyType::Static)
 		{
 			mLinearVelocity += mForce * mInvMass * elapsedTime;
-			//mAngularVelocity += mTorque * mInertia * elapsedTime;
+			mAngularVelocity += mTorque * mInvInertia * elapsedTime;
 		}
 	}
 

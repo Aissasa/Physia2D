@@ -22,6 +22,7 @@
 #define POLYGON_2_FILE "Files/Polygon2.json"
 #define POLYGON_VS_FILE "Files/PolygonVS.json"
 #define POLYGON_STATIC_FILE "Files/PolygonStatic.json"
+#define CIRCLE_STATIC_FILE "Files/CircleStatic.json"
 
 #define CIRCLE_BRAWL_1_FILE "Files/CircleBrawl1.json"
 #define CIRCLE_BRAWL_2_FILE "Files/CircleBrawl2.json"
@@ -53,9 +54,13 @@ shared_ptr<P2World> InitWorld(const TestCase testCase = TestCase::CircleVsCircle
 	shared_ptr<P2World> world = make_shared<P2World>();
 	JsonParser& parser = JsonParser::GetInstance();
 
-	string bodySFile = POLYGON_STATIC_FILE;
-	auto bodyS = parser.ParseBody(bodySFile);
-	world->AddBody(bodyS);
+	string polyStaticFile = POLYGON_STATIC_FILE;
+	auto polygonStatic = parser.ParseBody(polyStaticFile);
+	world->AddBody(polygonStatic);
+
+	string circleStaticFile = CIRCLE_STATIC_FILE;
+	auto circleStatic = parser.ParseBody(circleStaticFile);
+	world->AddBody(circleStatic);
 
 	string body1File;
 	string body2File;
@@ -139,7 +144,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nShowCmd);
 
-	auto world = InitWorld(TestCase::Brawl);
+	auto world = InitWorld(TestCase::PolygonVsPolygon);
 
 	ContextSettings settings = InitOpenGLSettings();
 

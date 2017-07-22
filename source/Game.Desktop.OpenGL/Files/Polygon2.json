@@ -1,6 +1,6 @@
 {
 	"Position": {
-		"x": 520,
+		"x": 600,
 		"y": 570
 	},
 	"Rotation": 0,
@@ -11,7 +11,7 @@
 	"AngularVel": 0,
 	"GravityScale": 1,
 	"Fixture": {
-		"Density": 0.9,
+		"Density": 4,
 		"Bounciness": 0.2,
 		"Friction": 1,
 		"Shape": {
