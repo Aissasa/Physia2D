@@ -1,9 +1,9 @@
 {
 	"Position": {
-		"x": 220,
+		"x": 200,
 		"y": 170
 	},
-	"Rotation": 0,
+	"Rotation": 1,
 	"LinearVel": {
 		"x": 40,
 		"y": 55

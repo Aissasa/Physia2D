@@ -89,4 +89,10 @@ namespace Physia2D
 	{
 		mGravity = gravity;
 	}
+
+	/*******************************************************/
+	void P2World::Clear()
+	{
+		mBodies.clear();
+	}
 }

@@ -40,7 +40,7 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	P2MassData P2CircleShape::ComputeMass(const float32_t density) const
+	P2MassData P2CircleShape::ComputeMass(const float32_t density)
 	{
 		P2MassData massData;
 

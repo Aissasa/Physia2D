@@ -21,8 +21,6 @@ namespace Physia2D
 
 		static JsonParser& GetInstance();
 
-		// todo add parse world
-		//std::shared_ptr<P2World> ParseWorld(const std::string& filePath);
 		std::shared_ptr<P2Body> ParseBody(const std::string& filePath) const;
 		std::shared_ptr<P2Body> ParseBody(const rapidjson::Value& doc) const;
 

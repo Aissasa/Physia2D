@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Spawner.h" />
     <ClInclude Include="Stopwatch.h" />
     <ClInclude Include="WorldRenderer.h" />
   </ItemGroup>
@@ -36,6 +37,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="Stopwatch.cpp" />
     <ClCompile Include="WorldRenderer.cpp" />
   </ItemGroup>

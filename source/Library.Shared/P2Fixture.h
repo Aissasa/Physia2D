@@ -17,6 +17,7 @@ namespace Physia2D
 		{
 		}
 
+		// todo replace with weak_ptr
 		P2Shape* Shape;
 		glm::float32_t Density;
 		glm::float32_t Bounciness;
@@ -47,7 +48,6 @@ namespace Physia2D
 
 	private:
 
-		//friend class P2World;
 		friend class P2Body;
 
 		void Create(P2Body& body, const P2FixtureConfig& fixtureConfig);

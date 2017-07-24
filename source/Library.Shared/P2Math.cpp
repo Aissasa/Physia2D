@@ -149,13 +149,13 @@ namespace Physia2D
 	/*******************************************************/
 	int32_t MathHelper::RangedRandomInt(const int32_t max, const int32_t min) const
 	{
-		return rand() % (max - min + 1) - min;
+		return rand() % (max - min + 1) + min;
 	}
 
 	/*******************************************************/
 	uint8_t MathHelper::RangedRandomUByte(const uint8_t max, const uint8_t min) const
 	{
-		return static_cast<uint8_t>(rand() % (max - min + 1) - min);
+		return static_cast<uint8_t>(rand() % (max - min + 1) + min);
 	}
 
 	/*******************************************************/

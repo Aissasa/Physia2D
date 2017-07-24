@@ -7,6 +7,7 @@
 #include "JsonParser.h"
 #include "WorldRenderer.h"
 #include "Stopwatch.h"
+#include "Spawner.h"
 
 
 #define SCREEN_WIDTH 1400
@@ -37,6 +38,7 @@ using namespace std;
 using namespace Physia2D;
 using namespace sf;
 using namespace glm;
+using namespace Testbed;
 
 /***************************************************************************************************************************/
 enum class TestCase
@@ -44,7 +46,8 @@ enum class TestCase
 	CircleVsCircle,
 	PolygonVsPolygon,
 	CircleVsPolygon,
-	Brawl
+	Brawl,
+	Empty
 };
 
 /***************************************************************************************************************************/
@@ -71,58 +74,67 @@ shared_ptr<P2World> InitWorld(const TestCase testCase = TestCase::CircleVsCircle
 		{
 			body1File = CIRCLE_1_FILE;
 			body2File = CIRCLE_2_FILE;
+			auto body1 = parser.ParseBody(body1File);
+			auto body2 = parser.ParseBody(body2File);
+			world->AddBody(body1);
+			world->AddBody(body2);
+
 			break;
 		}
 		case TestCase::PolygonVsPolygon:
 		{
 			body1File = POLYGON_1_FILE;
 			body2File = POLYGON_2_FILE;
+			auto body1 = parser.ParseBody(body1File);
+			auto body2 = parser.ParseBody(body2File);
+			world->AddBody(body1);
+			world->AddBody(body2);
+
 			break;
 		}
 		case TestCase::CircleVsPolygon:
-		{		
+		{
 			body1File = POLYGON_VS_FILE;
 			body2File = CIRCLE_VS_FILE;
+			auto body1 = parser.ParseBody(body1File);
+			auto body2 = parser.ParseBody(body2File);
+			world->AddBody(body1);
+			world->AddBody(body2);
+
+			break;
+		}
+		case TestCase::Brawl:
+		{
+			body1File = CIRCLE_BRAWL_1_FILE;
+			body2File = CIRCLE_BRAWL_2_FILE;
+			string body3File = CIRCLE_BRAWL_3_FILE;
+			string body7File = CIRCLE_BRAWL_4_FILE;
+			string body4File = POLYGON_BRAWL_1_FILE;
+			string body5File = POLYGON_BRAWL_2_FILE;
+			string body6File = POLYGON_BRAWL_3_FILE;
+			string body8File = POLYGON_BRAWL_4_FILE;
+
+			auto body1 = parser.ParseBody(body1File);
+			auto body2 = parser.ParseBody(body2File);
+			auto body3 = parser.ParseBody(body3File);
+			auto body4 = parser.ParseBody(body4File);
+			auto body5 = parser.ParseBody(body5File);
+			auto body6 = parser.ParseBody(body6File);
+			auto body7 = parser.ParseBody(body7File);
+			auto body8 = parser.ParseBody(body8File);
+			world->AddBody(body1);
+			world->AddBody(body2);
+			world->AddBody(body3);
+			world->AddBody(body4);
+			world->AddBody(body5);
+			world->AddBody(body6);
+			world->AddBody(body7);
+			world->AddBody(body8);
+
 			break;
 		}
 		default:;
 	}
-
-	if (testCase == TestCase::Brawl)
-	{
-		body1File = CIRCLE_BRAWL_1_FILE;
-		body2File = CIRCLE_BRAWL_2_FILE;
-		string body3File = CIRCLE_BRAWL_3_FILE;
-		string body7File = CIRCLE_BRAWL_4_FILE;
-		string body4File = POLYGON_BRAWL_1_FILE;
-		string body5File = POLYGON_BRAWL_2_FILE;
-		string body6File = POLYGON_BRAWL_3_FILE;
-		string body8File = POLYGON_BRAWL_4_FILE;
-
-		auto body1 = parser.ParseBody(body1File);
-		auto body2 = parser.ParseBody(body2File);
-		auto body3 = parser.ParseBody(body3File);
-		auto body4 = parser.ParseBody(body4File);
-		auto body5 = parser.ParseBody(body5File);
-		auto body6 = parser.ParseBody(body6File);
-		auto body7 = parser.ParseBody(body7File);
-		auto body8 = parser.ParseBody(body8File);
-		world->AddBody(body1);
-		world->AddBody(body2);
-		world->AddBody(body3);
-		world->AddBody(body4);
-		world->AddBody(body5);
-		world->AddBody(body6);
-		world->AddBody(body7);
-		world->AddBody(body8);
-
-		return world;
-	}
-
-	auto body1 = parser.ParseBody(body1File);
-	auto body2 = parser.ParseBody(body2File);
-	world->AddBody(body1);
-	world->AddBody(body2);
 
 	return world;
 }
@@ -144,7 +156,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nShowCmd);
 
-	auto world = InitWorld(TestCase::PolygonVsPolygon);
+	auto world = InitWorld(TestCase::Brawl);
 
 	ContextSettings settings = InitOpenGLSettings();
 
@@ -157,10 +169,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	window.setView(view);
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(FPS);
+	window.setKeyRepeatEnabled(false);
 
+	Spawner sp;
 	Stopwatch sw;
 	const float32_t dt = 1.0f / FPS;
 	float32_t timer = 0;
+
+	bool leftButtonReleased = true;
+	bool rightButtonReleased = true;
+	bool middleButtonReleased = true;
 
 	while (window.isOpen())                    // run the program as long as the window is open
 	{
@@ -169,6 +187,39 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 			if (event.type == Event::Closed)
 				window.close();
+
+			// check if the mouse buttons are released to avoid multiple spawns
+			if (event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
+				leftButtonReleased = true;
+
+			if (event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Right)
+				rightButtonReleased = true;
+
+			if (event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Middle)
+				middleButtonReleased = true;
+
+		}
+
+		// handle input
+		if (middleButtonReleased && Mouse::isButtonPressed(Mouse::Middle))
+		{
+			middleButtonReleased = false;
+			world->Clear();
+			world = InitWorld(TestCase::Empty);
+		}
+
+		if (leftButtonReleased && Mouse::isButtonPressed(Mouse::Left))
+		{
+			leftButtonReleased = false;
+			auto position = Mouse::getPosition(window);
+			world->AddBody(sp.CreateRandomPolygon(static_cast<float32_t>(position.x), SCREEN_HEIGHT - static_cast<float32_t>(position.y)));
+		}
+
+		if (rightButtonReleased && Mouse::isButtonPressed(Mouse::Right))
+		{
+			rightButtonReleased = false;
+			auto position = Mouse::getPosition(window);
+			world->AddBody(sp.CreateRandomCircle(static_cast<float32_t>(position.x), SCREEN_HEIGHT - static_cast<float32_t>(position.y)));
 		}
 
 		timer += sw.DelayFromLastFrameInSeconds();
@@ -180,7 +231,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		window.clear(Color::Black);
-		Testbed::WorldRenderer::GetInstance().RenderWorld(window, *world, HOLLOW_SHAPES_ENABLED);
+		WorldRenderer::GetInstance().RenderWorld(window, *world, HOLLOW_SHAPES_ENABLED);
 		window.display();
 	}
 

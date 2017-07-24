@@ -38,7 +38,7 @@ namespace Physia2D
 
 		virtual P2Shape* Clone() override;
 		virtual P2AABB ComputeAABB(const P2Transform& transform) const override;
-		virtual P2MassData ComputeMass(const glm::float32_t density) const override;
+		virtual P2MassData ComputeMass(const glm::float32_t density) override;
 		virtual glm::vec2 GetCenter() const override;
 
 		// todo use http://en.wikipedia.org/wiki/Gift_wrapping_algorithm to make sure it's convex
@@ -51,13 +51,14 @@ namespace Physia2D
 
 		glm::uint32_t VerticesCount() const;
 
+		static glm::float32_t ComputeArea(const std::vector<glm::vec2>& verts);
+		static glm::vec2 ComputeCentroid(const std::vector<glm::vec2>& vertices);
+
 		static const glm::float32_t PolygonEdgeWidth;
 
 	private:
 
-		glm::float32_t ComputeArea(const std::vector<glm::vec2>& verts) const;
-		glm::vec2 ComputeCentroid(const std::vector<glm::vec2>& vertices, const glm::float32_t area) const;
-		glm::float32_t ComputeInertia(const glm::float32_t density) const;
+		//glm::float32_t ComputeInertia(const glm::float32_t density) const;
 
 		std::vector<glm::vec2> mVertices;
 		glm::vec2 mCentroid;

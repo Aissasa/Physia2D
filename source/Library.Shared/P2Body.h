@@ -25,7 +25,7 @@ namespace Physia2D
 	struct P2BodyConfig
 	{
 		P2BodyConfig() :
-			Type(P2BodyType::Dynamic), Position(0), Rotation(0), LinearVelocity(0), AngularVelocity(0), GravityScale(0)
+			Type(P2BodyType::Dynamic), Position(0.f), Rotation(0.f), LinearVelocity(0.f), AngularVelocity(0.f), GravityScale(1.f)
 		{
 		}
 
@@ -102,6 +102,7 @@ namespace Physia2D
 		glm::vec2 mForce;
 		glm::float32_t mTorque;
 
+		// todo replace this with waek_ptr
 		const P2World* mWorld;
 		std::shared_ptr<P2Fixture> mFixture;
 

@@ -50,14 +50,49 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	P2MassData P2PolygonShape::ComputeMass(const float32_t density) const
+	P2MassData P2PolygonShape::ComputeMass(const float32_t density)
 	{
 		P2MassData massData;
 
-		float32_t area = ComputeArea(mVertices);
-		massData.Mass = area * density;
+		// Calculate centroid and moment of interia
+		vec2 c(0.0f, 0.0f); // centroid
+		float32_t area = 0.0f;
+		float32_t I = 0.0f;
+		const float32_t k_inv3 = 1.0f / 3.0f;
+
+		for (uint32 i1 = 0; i1 < mVertices.size(); ++i1)
+		{
+			// Triangle vertices, third vertex implied as (0, 0)
+			vec2 p1(mVertices[i1]);
+			uint32 i2 = i1 + 1 < mVertices.size() ? i1 + 1 : 0;
+			vec2 p2(mVertices[i2]);
+
+			float32_t D = MathHelper::GetInstance().CrossProduct(p1, p2);
+			float32_t triangleArea = 0.5f * D;
+
+			area += triangleArea;
+
+			// Use area to weight the centroid average, not just vertex position
+			c += triangleArea * k_inv3 * (p1 + p2);
+
+			float32_t intx2 = p1.x * p1.x + p2.x * p1.x + p2.x * p2.x;
+			float32_t inty2 = p1.y * p1.y + p2.y * p1.y + p2.y * p2.y;
+			I += (0.25f * k_inv3 * D) * (intx2 + inty2);
+		}
+
+		c *= 1.0f / area;
+
+		// Translate vertices to centroid (make the centroid (0, 0)
+		// for the polygon in model space)
+		// Not really necessary, but I like doing this anyway
+		for (uint32 i = 0; i < mVertices.size(); ++i)
+			mVertices[i] = mVertices[i] - c;
+
+		mArea = area;
+		mCentroid = vec2(0, 0);
+		massData.Mass = density * mArea;
+		massData.Inertia = I * density;
 		massData.Center = mCentroid;
-		massData.Inertia = ComputeInertia(density);
 
 		return massData;
 	}
@@ -72,9 +107,6 @@ namespace Physia2D
 	bool P2PolygonShape::SetVertices(vector<vec2>& vertices)
 	{
 		mVertices = vertices;
-
-		mArea = ComputeArea(mVertices);
-		mCentroid = ComputeCentroid(mVertices, mArea);
 
 		return true;
 	}
@@ -126,7 +158,7 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	float32_t P2PolygonShape::ComputeArea(const vector<vec2>& verts) const
+	float32_t P2PolygonShape::ComputeArea(const vector<vec2>& verts)
 	{
 		float32_t sum = 0;
 
@@ -142,8 +174,10 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	vec2 P2PolygonShape::ComputeCentroid(const vector<vec2>& vertices, const float32_t area) const
+	vec2 P2PolygonShape::ComputeCentroid(const vector<vec2>& vertices)
 	{
+		float32_t area = ComputeArea(vertices);
+
 		float32_t cx = 0;
 		float32_t cy = 0;
 
@@ -167,39 +201,5 @@ namespace Physia2D
 		cy /= 6 * area;
 
 		return vec2(cx, cy);
-	}
-
-	/*******************************************************/
-	float32_t P2PolygonShape::ComputeInertia(const float32_t density) const
-	{
-		float32_t total = 0;
-
-		for (uint32_t i = 0; i < mVertices.size(); ++i)
-		{
-			vec2 currentVec = mVertices[i];
-			vec2 nextVec = mVertices[(i + 1) % mVertices.size()];
-
-			vector<vec2> triangle;
-			triangle.push_back(mCentroid);
-			triangle.push_back(currentVec);
-			triangle.push_back(nextVec);
-
-			float32_t area = ComputeArea(triangle);
-			float32_t mass = area * density;
-
-			//I_{ triangle } = m / 36 * (x1*(y3 - y2) + x2*(y1 - y3) + x3*(y2 - y1))*(x1 ^ 2 + x2 ^ 2 + x3 ^ 2 – x1*x2 – x1*x3 – x2*x3 + y1 ^ 2 + y2 ^ 2 + y3 ^ 2 – y1*y2 – y1*y3 – y2*y3)
-			float32_t triangleInertia = (mass / 36) * ((mCentroid.x * (nextVec.y - currentVec.y) + currentVec.x * (mCentroid.y - nextVec.y)) *
-				(mCentroid.x * mCentroid.x + currentVec.x * currentVec.x + nextVec.x * nextVec.x -
-				 mCentroid.x * currentVec.x - mCentroid.x * nextVec.x - currentVec.x +
-				 mCentroid.y * mCentroid.y + currentVec.y * currentVec.y + nextVec.y * nextVec.y -
-				 mCentroid.y * currentVec.y - mCentroid.y * nextVec.y - currentVec.y));
-
-			vec2 triangleCenter = ComputeCentroid(triangle, area);
-			float32_t distanceSquared = MathHelper::GetInstance().LengthSquared(mCentroid - triangleCenter);
-
-			total += triangleInertia + mass * distanceSquared;
-		}
-
-		return total;
 	}
 }

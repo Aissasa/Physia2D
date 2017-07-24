@@ -17,7 +17,7 @@ namespace Physia2D
 
 		virtual P2Shape* Clone() override;
 		virtual P2AABB ComputeAABB(const P2Transform& transform) const override;
-		virtual P2MassData ComputeMass(const glm::float32_t density) const override;
+		virtual P2MassData ComputeMass(const glm::float32_t density) override;
 
 		virtual glm::vec2 GetCenter() const override;
 

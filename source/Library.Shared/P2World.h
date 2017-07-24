@@ -22,6 +22,8 @@ namespace Physia2D
 		glm::vec2 GetGravity() const;
 		void SetGravity(const glm::vec2& gravity);
 
+		void Clear();
+
 	private:
 
 		std::vector<std::shared_ptr<P2Body>> mBodies;

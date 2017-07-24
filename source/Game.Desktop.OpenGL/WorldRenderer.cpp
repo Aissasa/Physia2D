@@ -24,7 +24,7 @@ namespace Testbed
 	/**********************************************************************************************/
 	WorldRenderer::WorldRenderer() :
 		mCircleColor(Color::Cyan),
-		mCircleCollisionColor(Color::Blue),
+		mCircleCollisionColor(Color::Magenta),
 		mPolygonColor(Color::Yellow),
 		mPolygonCollisionColor(Color::Red)
 	{

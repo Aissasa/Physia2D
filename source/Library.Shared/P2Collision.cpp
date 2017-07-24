@@ -11,8 +11,8 @@ namespace Physia2D
 {
 	// todo add radii of shapes to the equations
 
-	const float32_t P2Collision::kSlop = 0.01f;
-	const float32_t P2Collision::kPercent = 0.1f;
+	const float32_t P2Collision::kSlop = 0.02f;
+	const float32_t P2Collision::kPercent = 0.2f;
 
 	const float32_t P2Collision::kDynamicFrictionMultiplier = 0.7f;
 
@@ -53,6 +53,7 @@ namespace Physia2D
 	/***********************************************************************************************/
 	bool P2Collision::ResolveCollision(P2Body& body1, P2Body& body2, P2Manifold& manifold, const float32_t elapsedTime) const
 	{
+		elapsedTime;
 		auto& math = MathHelper::GetInstance();
 		bool collided = true;
 
@@ -64,6 +65,15 @@ namespace Physia2D
 			vec2 body1Rad = contactPoint - body1Center;
 			vec2 body2Rad = contactPoint - body2Center;
 
+			// correct the collision normal
+			vec2 fromBody1ToBody2 = body2Center - body1Center;
+
+			// todo check if this fixes the collision with big objects
+			if (dot(fromBody1ToBody2, manifold.Normal) < 0)
+			{
+				manifold.Normal = -manifold.Normal;
+			}
+
 			// Calculate relative velocity
 			vec2 relativeVel = body2.GetLinearVelocity() + math.CrossProduct(body2.GetAngularVelocity(), body2Rad) -
 				body1.GetLinearVelocity() - math.CrossProduct(body1.GetAngularVelocity(), body1Rad);
@@ -74,11 +84,14 @@ namespace Physia2D
 			// Calculate restitution
 			float32_t e = glm::min(body1.GetFixture()->GetBounciness(), body2.GetFixture()->GetBounciness());
 
+			float32_t body1RadCrossN = math.CrossProduct(body1Rad, manifold.Normal);
+			float32_t body2RadCrossN = math.CrossProduct(body2Rad, manifold.Normal);
+
+			float32_t body1InertiaComponent = body1RadCrossN * body1RadCrossN * body1.GetInvInertia();
+			float32_t body2InertiaComponent = body2RadCrossN * body2RadCrossN * body2.GetInvInertia();
+
 			// Calculate impulse scalar along the normal
 			float jNormal = -(1 + e) * velAlongNormal;
-
-			float32_t body1InertiaComponent = math.CrossProduct(body1Rad, manifold.Normal) * math.CrossProduct(body1Rad, manifold.Normal) * body1.GetInvInertia();
-			float32_t body2InertiaComponent = math.CrossProduct(body2Rad, manifold.Normal) * math.CrossProduct(body2Rad, manifold.Normal) * body2.GetInvInertia();
 
 			jNormal /= body1.GetInvMass() + body2.GetInvMass() + body1InertiaComponent + body2InertiaComponent;
 			jNormal /= static_cast<float32_t>(manifold.ContactPoints.size());
@@ -90,7 +103,7 @@ namespace Physia2D
 			float32_t angVel1 = body1.GetAngularVelocity() - body1.GetInvInertia() * math.CrossProduct(body1Rad, nImpulse);
 			float32_t angVel2 = body2.GetAngularVelocity() + body2.GetInvInertia() * math.CrossProduct(body2Rad, nImpulse);
 
-			// compute the potential position with the new velocity
+			//// compute the potential position with the new velocity
 			P2Transform body1PotentialTransform = body1.GetTransform();
 			P2Transform body2PotentialTransform = body2.GetTransform();
 			body1PotentialTransform.Position += vel1 * elapsedTime;
@@ -115,14 +128,14 @@ namespace Physia2D
 			vec2 fromCenter2ToCenter1 = body1PotentialOldCenter - body2PotentialOldCenter;
 
 			// if the bodies are not moving towards each other, than do nothing
-			if (dot(fromPotCenter2ToPotCenter1, relativeVel) < 0 &&
+			if (/*dot(fromPotCenter2ToPotCenter1, relativeVel) < 0 &&*/
 				math.LengthSquared(fromPotCenter2ToPotCenter1) < math.LengthSquared(fromCenter2ToCenter1))
 			{
 				collided = false;
 			}
 
 			// compute the friction impulse
-			relativeVel = vel2 + math.CrossProduct(body2.GetAngularVelocity(), body2Rad) - vel1 - math.CrossProduct(body1.GetAngularVelocity(), body1Rad);
+			relativeVel = vel2 + math.CrossProduct(angVel2, body2Rad) - vel1 - math.CrossProduct(angVel1, body1Rad);
 			vec2 tangent = relativeVel - dot(relativeVel, manifold.Normal) * manifold.Normal;
 
 			// the body is not stationary
@@ -131,7 +144,7 @@ namespace Physia2D
 				tangent /= length(tangent);
 
 				float32_t jTangent = -dot(relativeVel, tangent);
-				jTangent /= body1.GetInvMass() + body2.GetInvMass();
+				jTangent /= body1.GetInvMass() + body2.GetInvMass() + body1InertiaComponent + body2InertiaComponent;
 				jTangent /= static_cast<float32_t>(manifold.ContactPoints.size());
 
 				// Coulomb's Law : i chose mu as the avg of both frictions, and 0.7f the dynamic friction multiplier
@@ -313,8 +326,8 @@ namespace Physia2D
 		vec2 normalToUse;
 		bool needToFlipNormal = false;
 
-		vec2 fromPoly2ToPoly1 = math.RotateAndTranslateVertex(polygon1.GetCenter(), trans1)
-			- math.RotateAndTranslateVertex(polygon1.GetCenter(), trans2);
+		//vec2 fromPoly2ToPoly1 = math.RotateAndTranslateVertex(polygon1.GetCenter(), trans1)
+		//	- math.RotateAndTranslateVertex(polygon1.GetCenter(), trans2);
 
 		// Loop through all the vertices of both polygons and create the current edge off of them
 		for (uint32_t vertexIndex = 0; vertexIndex < polygon1.VerticesCount() + polygon2.VerticesCount(); ++vertexIndex)
@@ -357,10 +370,10 @@ namespace Physia2D
 			{
 				minIntervalDistance = currentIntervalDistance;
 				normalToUse = axis;
-				if (dot(normalToUse, fromPoly2ToPoly1) < 0)
-				{
-					needToFlipNormal = true;
-				}
+				//if (dot(normalToUse, fromPoly2ToPoly1) < 0)
+				//{
+				//	needToFlipNormal = true;
+				//}
 			}
 		}
 
@@ -482,10 +495,10 @@ namespace Physia2D
 				{
 					manifold.Penetration = circle.GetRadius() - distance;
 					manifold.Normal = axis / distance;
-					if (dot(manifold.Normal, fromCircleToPolygon) < 0)
-					{
-						manifold.Normal = -manifold.Normal;
-					}
+					//if (dot(manifold.Normal, fromCircleToPolygon) < 0)
+					//{
+					//	manifold.Normal = -manifold.Normal;
+					//}
 					manifold.ContactPoints.push_back(polygonVertices[i]);
 				}
 				else
@@ -532,10 +545,10 @@ namespace Physia2D
 					{
 						manifold.Penetration = circle.GetRadius() - distance;
 						manifold.Normal = axis / distance;
-						if (dot(manifold.Normal, fromCircleToPolygon) > 0)
-						{
-							manifold.Normal = -manifold.Normal;
-						}
+						//if (dot(manifold.Normal, fromCircleToPolygon) < 0)
+						//{
+						//	manifold.Normal = -manifold.Normal;
+						//}
 						manifold.ContactPoints.push_back(projection);
 					}
 					else

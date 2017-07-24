@@ -68,13 +68,16 @@ namespace Physia2D
 	void P2Body::ResetMassData()
 	{
 		// we need mass data only when the body is dynamic
-		if (mBodyType == P2BodyType::Dynamic && mFixture && mFixture->GetShape())
+		if (mBodyType != P2BodyType::Static && mFixture && mFixture->GetShape())
 		{
 			P2MassData massData = mFixture->GetShape()->ComputeMass(mFixture->GetDensity());
-			mMass = massData.Mass;
-			mInvMass = mMass == 0 ? mInvMass = 0 : mInvMass = 1 / mMass;
-			mInertia = massData.Inertia;
-			mInvInertia = mInertia == 0 ? mInvInertia = 0 : mInvInertia = 1 / mInertia;
+			if (mBodyType == P2BodyType::Dynamic)
+			{
+				mMass = massData.Mass;
+				mInvMass = mMass == 0 ? mInvMass = 0 : mInvMass = 1 / mMass;
+				mInertia = massData.Inertia;
+				mInvInertia = mInertia == 0 ? mInvInertia = 0 : mInvInertia = 1 / mInertia;
+			}
 		}
 	}
 

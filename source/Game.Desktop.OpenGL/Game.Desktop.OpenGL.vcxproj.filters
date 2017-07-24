@@ -4,12 +4,14 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="WorldRenderer.h" />
     <ClInclude Include="Stopwatch.h" />
+    <ClInclude Include="Spawner.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="WorldRenderer.cpp" />
     <ClCompile Include="Stopwatch.cpp" />
+    <ClCompile Include="Spawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Files">
