@@ -65,7 +65,7 @@ namespace Physia2D
 	}
 
 	/*******************************************************/
-	detail::float32 P2CircleShape::GetRadius() const
+	float32_t P2CircleShape::GetRadius() const
 	{
 		return mRadius;
 	}

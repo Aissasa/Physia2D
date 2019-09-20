@@ -1,6 +1,9 @@
 ﻿#include "pch.h"
 #include "P2Math.h"
 
+#include <glm.hpp>
+
+
 using namespace std;
 using namespace glm;
 

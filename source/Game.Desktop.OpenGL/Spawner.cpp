@@ -5,6 +5,8 @@
 #include "P2CircleShape.h"
 #include "P2PolygonShape.h"
 
+#include <glm.hpp>
+
 using namespace std;
 using namespace glm;
 using namespace Physia2D;

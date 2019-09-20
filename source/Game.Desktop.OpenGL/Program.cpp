@@ -143,7 +143,7 @@ shared_ptr<P2World> InitWorld(const TestCase testCase = TestCase::CircleVsCircle
 ContextSettings InitOpenGLSettings()
 {
 	ContextSettings settings;
-	settings.antialiasingLevel = 8;
+	//settings.antialiasingLevel = 8;
 
 	return settings;
 }
@@ -156,7 +156,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nShowCmd);
 
-	auto world = InitWorld(TestCase::Brawl);
+	auto world = InitWorld(TestCase::Empty);
 
 	ContextSettings settings = InitOpenGLSettings();
 
@@ -230,10 +230,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			timer -= dt;
 		}
 
-		window.clear(Color::Black);
+		window.clear();
 		WorldRenderer::GetInstance().RenderWorld(window, *world, HOLLOW_SHAPES_ENABLED);
 		window.display();
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 }

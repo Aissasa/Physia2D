@@ -23,7 +23,7 @@ namespace Physia2D
 
 	public:
 
-		enum class EType
+		enum class EType : glm::uint8_t
 		{
 			Circle,
 			Polygon
@@ -42,6 +42,6 @@ namespace Physia2D
 
 	protected:
 
-		EType mType;
+		EType mType = EType::Circle;
 	};
 }

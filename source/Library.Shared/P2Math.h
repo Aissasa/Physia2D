@@ -1,6 +1,7 @@
 #pragma once
 
-#include "glm.hpp"
+#include <fwd.hpp>
+#include <vec2.hpp>
 
 namespace Physia2D
 {
@@ -21,14 +22,14 @@ namespace Physia2D
 	private:
 
 		glm::float32_t mRotation; // in radians
-		glm::float32_t mCos, mSin;
+		glm::float32_t mCos{}, mSin{};
 	};
 
 	/** Structure representing a transform of a body in the world.
 	*/
 	struct P2Transform
 	{
-		P2Transform(const glm::vec2& position = glm::vec2(0), const glm::detail::float32 rotation = 0)
+		P2Transform(const glm::vec2& position = glm::vec2(0), const glm::float32_t rotation = 0)
 			: Position(position), Rotation(rotation)
 		{
 		}

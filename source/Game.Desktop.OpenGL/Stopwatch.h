@@ -1,13 +1,13 @@
 #pragma once
 
-#include <mat3x2.hpp>
+#include <fwd.hpp>
 #include <SFML/System/Clock.hpp>
 
 namespace Testbed
 {
 	/** Stopwatch used to calculate the time taken by a certain operation.
 	*/
-	class Stopwatch
+	class Stopwatch final
 	{
 
 	public:

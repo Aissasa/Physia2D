@@ -323,7 +323,7 @@ namespace Physia2D
 		vec2 edge;
 		float32_t minIntervalDistance = math.MaxFloat();
 		bool isIntersecting = true;
-		vec2 normalToUse;
+		vec2 normalToUse = {};
 		bool needToFlipNormal = false;
 
 		//vec2 fromPoly2ToPoly1 = math.RotateAndTranslateVertex(polygon1.GetCenter(), trans1)

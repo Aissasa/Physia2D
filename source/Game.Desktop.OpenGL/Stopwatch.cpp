@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Stopwatch.h"
 
+#include <glm.hpp>
+
 using namespace std;
 using namespace sf;
 using namespace glm;

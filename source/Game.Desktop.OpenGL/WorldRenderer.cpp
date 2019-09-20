@@ -9,7 +9,6 @@
 #include "P2CircleShape.h"
 #include "P2PolygonShape.h"
 #include "JsonParser.h"
-#include "P2Collision.h"
 
 
 using namespace std;
@@ -19,7 +18,7 @@ using namespace glm;
 
 namespace Testbed
 {
-	const float WorldRenderer::OUTLINE_THICKNESS = 0.5f;
+	const float WorldRenderer::OUTLINE_THICKNESS = 1.5f;
 
 	/**********************************************************************************************/
 	WorldRenderer::WorldRenderer() :
@@ -51,10 +50,10 @@ namespace Testbed
 	/**********************************************************************************************/
 	void WorldRenderer::RenderBody(RenderWindow& window, const P2Body& body, const bool colliding, const bool hollowShapes) const
 	{
-		auto fixture = body.GetFixture();
+		const auto fixture = body.GetFixture();
 		if (fixture != nullptr)
 		{
-			auto shape = fixture->GetShape();
+			const auto shape = fixture->GetShape();
 			if (shape != nullptr)
 			{
 				switch (shape->GetType())
@@ -84,10 +83,10 @@ namespace Testbed
 		CircleShape circle;
 		circle.setPosition(bodyTransform.Position.x, bodyTransform.Position.y);
 		circle.setRotation(MathHelper::GetInstance().FromRadiansToDegrees(bodyTransform.Rotation.GetRotation()));
-		circle.setOrigin(circleShape.GetCenter().x + circleShape.GetRadius(), circleShape.GetCenter().y + circleShape.GetRadius());
-		circle.setRadius(circleShape.GetRadius());
+		circle.setOrigin(circleShape.GetCenter().x + circleShape.GetRadius() - OUTLINE_THICKNESS * 0.5f, circleShape.GetCenter().y + circleShape.GetRadius());
+		circle.setRadius(circleShape.GetRadius() - OUTLINE_THICKNESS);
 
-		RectangleShape rectangle(Vector2f(circle.getRadius(), 2));
+		RectangleShape rectangle(Vector2f(circle.getRadius() - OUTLINE_THICKNESS * 0.5f, 1));
 		rectangle.setPosition(circle.getPosition().x, circle.getPosition().y);
 		rectangle.setRotation(circle.getRotation());
 
@@ -128,7 +127,7 @@ namespace Testbed
 			polygon.setPoint(i, Vector2f(vertices[i].x, vertices[i].y));
 		}
 
-		Color colorToUse = colliding ? mPolygonCollisionColor : mPolygonColor;
+		const Color colorToUse = colliding ? mPolygonCollisionColor : mPolygonColor;
 
 		if (hollowShape)
 		{
